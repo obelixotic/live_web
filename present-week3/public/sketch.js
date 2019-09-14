@@ -11,12 +11,12 @@ socket.on('connect', function() {
 // Input field
 let input;
 
-
 function setup() {
   noCanvas();
 
   // Listen for changes to input field
   input = select('#input');
+  input.input(inputChanged);
 
   // Listen for texts from partners
   socket.on('text', function(data) {
@@ -38,10 +38,16 @@ function display(txt) {
   p.html(txt);
 }
 
+function inputChanged() {
+  socket.emit('text', '...')
+}
+
 // Listen for line breaks to clear input field
 function keyPressed() {
   if (keyCode == ENTER) {
+    console.log('enter!');
     gibber(input.value())
+    console.log(input.value());
     input.value('');
   }
 }
