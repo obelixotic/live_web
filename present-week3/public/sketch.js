@@ -46,8 +46,8 @@ function inputChanged() {
 function keyPressed() {
   if (keyCode == ENTER) {
     console.log('enter!');
-    gibber(input.value())
     console.log(input.value());
+    gibber(input.value());
     input.value('');
   }
 }
