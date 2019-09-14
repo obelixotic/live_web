@@ -2,7 +2,7 @@
 let socket = io();
 
 // Listen for confirmation of connection
-socket.on('connect', function () {
+socket.on('connect', function() {
   console.log("Connected");
 });
 
@@ -18,14 +18,14 @@ function setup() {
   input.input(inputChanged);
 
   // Listen for texts from partners
-  socket.on('text', function (data) {
+  socket.on('text', function(data) {
     console.log(data);
     display(data);
   });
 
   // Remove disconnected users
   // Display "User left" message
-  socket.on('leave room', function () {
+  socket.on('leave room', function() {
     display('(they left...)');
   });
 }
@@ -34,7 +34,6 @@ function setup() {
 function display(txt) {
   removeElements();
   let p = createP();
-  p.addClass('fade');
   p.html(txt);
 }
 
@@ -45,7 +44,7 @@ function inputChanged() {
 
 // Listen for line breaks to clear input field
 function keyPressed() {
-  if(keyCode == ENTER) {
+  if (keyCode == ENTER) {
     input.value('');
   }
 }

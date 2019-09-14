@@ -2,7 +2,7 @@
 let port = process.env.PORT || 8000;
 let express = require('express');
 let app = express();
-let server = require('http').createServer(app).listen(port, function () {
+let server = require('http').createServer(app).listen(port, function() {
   console.log('Server listening at port: ', port);
 });
 
@@ -18,14 +18,14 @@ let roomNum = 0;
 let NUM_PARTNERS = 2;
 
 // Listen for clients to connect
-io.sockets.on('connection', function (socket) {
+io.sockets.on('connection', function(socket) {
   console.log('An input client connected: ' + socket.id);
 
   // Join a room
   joinRoom(socket);
 
   // Listen for data messages
-  socket.on('text', function (data) {
+  socket.on('text', function(data) {
     // Data comes in as whatever was sent, including objects
     //console.log("Received: 'message' " + data);
 
@@ -39,7 +39,7 @@ io.sockets.on('connection', function (socket) {
 
   // Listen for this client to disconnect
   // Tell partners this client disconnected
-  socket.on('disconnect', function () {
+  socket.on('disconnect', function() {
     console.log("Client has disconnected " + socket.id);
 
     // Which room was this client in?
@@ -53,7 +53,6 @@ io.sockets.on('connection', function (socket) {
 
 // Join room
 function joinRoom(socket) {
- console.log(rooms);
   // First, add client to incomplete rooms
   for (let r in rooms) {
     let room = rooms[r];
@@ -75,4 +74,5 @@ function addSocketToRoom(socket, r) {
   socket.join(r);
   rooms[r].isPrivate = true;
   socket.room = r;
+  console.log(rooms);
 }
