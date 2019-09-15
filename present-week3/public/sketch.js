@@ -39,7 +39,7 @@ function display(txt) {
 }
 
 function inputChanged() {
-  socket.emit('text', '...')
+  socket.emit('text', 'someone is typing...')
 }
 
 // Listen for line breaks to clear input field
