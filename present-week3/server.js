@@ -49,27 +49,31 @@ io.sockets.on('connection', function(socket) {
   socket.on('text', function(data) {
     // Data comes in as whatever was sent, including objects
     //console.log("Received: 'message' " + data);
-
     // Which private room does this client belong to?
     let room = socket.room;
-    let members = rooms[room].sockets;
+    // let members = rooms[room].sockets;
     // console.log(members);
-    let sender = socket.id;
+    // let sender = socket.id;
     // console.log('sender: ' + sender);
-    let receiver;
-    for (member in members) {
-      if (member != sender) {
-        receiver = member;
-        // console.log('receiver: ' + receiver);
-      }
-    }
+    // let receiver;
+    // for (member in members) {
+    //   if (member != sender) {
+    //     receiver = member;
+    //     console.log('receiver: ' + receiver);
+    //   }
+    // }
+    //
+    // socket.broadcast.to(receiver).emit('text', data);
 
     // Share data to all members of room
-    // socket.to(room).emit('text', data);
-    socket.broadcast.to(receiver).emit('text', data);
+    socket.to(room).emit('text', data);
 
   });
 
+  socket.on('istyping', function() {
+    let room = socket.room;
+    socket.to(room).emit('istyping');
+  });
 
   // Listen for this client to disconnect
   // Tell partners this client disconnected

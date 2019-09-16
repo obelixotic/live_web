@@ -29,6 +29,10 @@ function setup() {
     display(data);
   });
 
+  socket.on('istyping', function() {
+    show();
+  });
+
   socket.on('connectedUsername', function(user) {
     otherUser = user;
     console.log('connected to: ' + otherUser);
@@ -44,25 +48,24 @@ function setup() {
 }
 
 // Display text
-function display(txt) {
+function show() {
   removeElements();
-  let p = createP();
-  p.html(txt);
-  // p.html(`${otherUser} ${txt}`);
+  let u = createP();
+  u.html(`${otherUser} is typing...`);
 }
 
-// function show(username) {
-//   // removeElements();
-//   let u = createP();
-//   u.html(username);
-// }
+function display(data) {
+  removeElements();
+  let p = createP();
+  p.html(data);
+}
 
 function inputChanged() {
-  console.log(otherUser);
-  let typing = `${otherUser} is typing...`;
+  // console.log(otherUser);
+  // let typing = ' is typing...';
   // let typing = ' is typing...';
   // console.log(typing);
-  socket.emit('text', typing);
+  socket.emit('istyping');
 }
 
 // Listen for line breaks to clear input field
