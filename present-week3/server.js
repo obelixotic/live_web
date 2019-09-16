@@ -24,6 +24,27 @@ io.sockets.on('connection', function(socket) {
   // Join a room
   joinRoom(socket);
 
+  socket.on('username', function(senderUsername) {
+
+    let room = socket.room;
+    let data = senderUsername;
+    // console.log(data);
+    let members = rooms[room].sockets;
+    // console.log(members);
+    let sender = socket.id;
+    // console.log('sender: ' + sender);
+    let receiver;
+    for (member in members) {
+      if (member != sender) {
+        receiver = member;
+        // console.log('receiver: ' + receiver);
+      }
+    }
+
+    // socket.to(room).emit('connectedUsername', data);
+    socket.broadcast.to(receiver).emit('connectedUsername', data);
+  });
+
   // Listen for data messages
   socket.on('text', function(data) {
     // Data comes in as whatever was sent, including objects
@@ -31,9 +52,22 @@ io.sockets.on('connection', function(socket) {
 
     // Which private room does this client belong to?
     let room = socket.room;
+    let members = rooms[room].sockets;
+    // console.log(members);
+    let sender = socket.id;
+    // console.log('sender: ' + sender);
+    let receiver;
+    for (member in members) {
+      if (member != sender) {
+        receiver = member;
+        // console.log('receiver: ' + receiver);
+      }
+    }
 
     // Share data to all members of room
-    socket.to(room).emit('text', data);
+    // socket.to(room).emit('text', data);
+    socket.broadcast.to(receiver).emit('text', data);
+
   });
 
 
