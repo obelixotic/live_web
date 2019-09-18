@@ -61,8 +61,6 @@ function display(data) {
 }
 
 function inputChanged() {
-  // console.log(otherUser);
-  // let typing = ' is typing...';
   // let typing = ' is typing...';
   // console.log(typing);
   socket.emit('istyping');
