@@ -36,8 +36,8 @@ function setup() {
   });
 
   socket.on('istyping', function() {
-    // show();
-    display();
+    show();
+    // display();
   });
 
   socket.on('connectedUsername', function(user) {
