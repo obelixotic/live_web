@@ -1,9 +1,18 @@
 //fs over remote server with add/del/rename and sync on first run capability
+var myArgs = process.argv.slice(2);
+console.log('myArgs: ', myArgs);
+
 const {
   exec
 } = require('child_process');
 const fs = require('fs');
-const watchdir = './public';
+// const watchdir = './public';
+// const remote_server = 'root@198.211.97.177';
+// const remote_dir = 'live_web/public/';
+const watchdir = myArgs[0]; //arg 1
+const remote_server = myArgs[1]; //arg 2
+const remote_dir = myArgs[2]; //arg 3
+
 let files_original;
 let files_rename;
 let mv_arg1, mv_arg2;
@@ -70,7 +79,7 @@ fs.watch(watchdir, (event, filename) => {
 
 
 function scpFile(filename) {
-  exec(`scp ./${watchdir}/${filename} root@198.211.97.177:/root/live_web/public/`,
+  exec(`scp ./${watchdir}/${filename} ${remote_server}:/root/${remote_dir}`,
     (error, stdout, stderr) => {
 
       if (error) {
