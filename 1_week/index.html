@@ -1,34 +1,55 @@
-<html>
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
 
 <head>
-  <script type="text/javascript" src="/socket.io/socket.io.js"></script>
-  <script type="text/javascript">
-    var socket = io.connect();
+  <meta charset="utf-8">
+  <title>Tushar's webpage</title>
+  <style>
+    body {
+      background-image: url("background.jpg");
+      background-repeat: no-repeat;
+      background-size: 1620px 1080px;
+    }
 
-    socket.on('connect', function() {
-      console.log("Connected");
+    #image {
+      position: fixed;
+      border-radius: 50%;
+      height: 200px;
+      image-orientation: from-image;
+    }
+  </style>
+
+  <script>
+    window.addEventListener('load', function() {
+      console.log('load complete');
+      document.addEventListener('mousedown', showImage);
     });
 
-    // Receive from any event
-    socket.on('chatmessage', function(data) {
-      console.log(data);
-      document.getElementById('messages').innerHTML = "" + data +
-        +"" + document.getElementById('messages').innerHTML;
-    });
+    // let images = ["1.jpg", "2.jpg"];
+    let images = 39;
 
-    var sendmessage = function(message) {
-      console.log("chatmessage: " + message);
-      socket.emit('chatmessage', message);
-    };
+    function showImage(e) {
+      console.log(e);
+      let randomIndex = Math.floor(Math.random() * images);
+      console.log(randomIndex);
+
+      document.getElementById("image").src = `pics/${randomIndex}.jpg`;
+      console.log(document.getElementById("image").src);
+      document.getElementById("image").style.left = (e.screenX - e.screenX / 1000) + 'px';
+      document.getElementById("image").style.bottom = (1000 - e.screenY - e.screenY / 100) + 'px';
+
+      // console.log(document.("image").style.top);
+
+      // setTimeout(function() {
+      //   document.getElementById("image").src = ""
+      // }, 4000);
+    }
   </script>
+
 </head>
 
 <body>
-  <div id="messages">
-    No Messages Yet
-  </div>
-  <input type="text" id="message" name="message">
-  <input type="submit" value="submit" onclick="sendmessage(document.getElementById('message').value);">
+  <img src="" id="image" />
 </body>
 
 </html>

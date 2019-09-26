@@ -3,7 +3,8 @@ var http = require('http');
 var fs = require('fs'); // Using the filesystem module
 var httpServer = http.createServer(requestHandler);
 var url = require('url');
-httpServer.listen(8080);
+httpServer.listen(8000);
+console.log("listening on port 8000");
 
 function requestHandler(req, res) {
 
