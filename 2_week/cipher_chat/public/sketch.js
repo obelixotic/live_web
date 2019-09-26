@@ -123,12 +123,6 @@ function randomAccentCol() {
 /*
  * credit:
  * https://www.nayuki.io/res/vigenere-cipher-javascript/vigenere-cipher.js
- * Vigenère cipher
- *
- * Copyright (c) 2017 Project Nayuki
- * All rights reserved. Contact Nayuki for licensing.
- * https://www.nayuki.io/page/vigenere-cipher-javascript
- */
 
 "use strict";
 
