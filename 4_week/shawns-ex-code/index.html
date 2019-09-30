@@ -7,6 +7,7 @@
 		var socket = io.connect();
 		var start = null;
 		var index = 0;
+		var latest;
 
 			socket.on('connect', function() {
 				console.log("Connected");
@@ -31,7 +32,7 @@
 				// Incoming image..
 				console.log("image recd");
 				console.log(imageData.image);
-				let latest = imageData.image;
+				latest = imageData.image;
 
 				window.requestAnimationFrame(step);
 
@@ -116,12 +117,15 @@
 					});
 
 					window.addEventListener('keypress', function(e){
-						console.log(gif);
+						// console.log(gif);
 						let v = {
 							image: gif
 						}
+						console.log(v);
 						socket.emit('image', v);
 						gif = [];
+						// console.log("post " + gif);
+						// console.log("post " + v);
 					});
 
         // window.addEventListener('mousemove', function(e) {
