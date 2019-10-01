@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.11/p5.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.11/addons/p5.dom.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.11/addons/p5.sound.min.js"></script> -->
+
+  <link rel="stylesheet" type="text/css" href="vidstyle.css">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body id='gradientContainer' class='gradientContainer'>
+
+  <!-- <script src="sketch.js"></script> -->
+  <script src="gif.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <!-- <script src="username.js"></script> -->
+
+  <div id='chatHolder'>
+    <input id="username" class="force-select-all" placeholder="whats your name" maxlength="15"></input>
+
+    <div id='inputText'></div>
+    <div id='usernameText'></div>
+
+    <button id='photobttn'>Snap A Pix</button>
+    <button id='playbttn'>Play Me</button>
+
+    <video id="myvideo" width="500" height="500" muted></video>
+    <canvas width="500" height="500" id="mycanvas"></canvas>
+    <img id="otherimage" width="500" height="500" src="" />
+
+  </div>
+
+  <!--NOT NECESSARY-->
+  <!--
+    <input id="username" class="force-select-all" placeholder="whats your name" maxlength="15"></inpust> -->
+
+  <!-- <div id='displayTextHolder'>
+      <p id="displayText"></p>
+    </div> -->
+
+  <!-- <input id="inputText" placeholder="say something" maxlength="45"></input> -->
+</body>
+
+</html>

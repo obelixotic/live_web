@@ -1,0 +1,39 @@
+#inputText {
+  z-index: 3;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5vh;
+  color: black;
+  font-size: 2vw;
+  font-family: sans-serif;
+  background: yellow;
+  /* visibility: hidden; */
+}
+
+#usernameText {
+  z-index: 4;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 5vh;
+  color: white;
+  font-size: 2vw;
+  font-family: sans-serif;
+  background: blue;
+  /* visibility: hidden; */
+}
+
+#partner-canvas {
+  border: 2px blue solid;
+}
+
+#mycanvas {
+  border: 2px yellow solid;
+}
+
+#otherimage {
+  border: 2px yellow solid;
+}
