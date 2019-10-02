@@ -50,22 +50,6 @@ io.sockets.on('connection',
       socket.broadcast.to(receiver).emit('connectedUsername', data);
     });
 
-
-    /* IGNORE TEXT MSG FOR NOW
-    // Listen for data messages
-    socket.on('text', function (data) {
-      // Data comes in as whatever was sent, including objects
-      //console.log("Received: 'message' " + data);
-      // Which private room does this client belong to?
-      let room = socket.room;
-
-      // Share data to all members of room
-      socket.to(room).emit('text', data);
-    }
-*/
-
-    /////// MERGED SECTION ///////
-
     // listen for 'image' event then emit to other sockets
     socket.on('image', function(data) {
       let room = socket.room;
@@ -85,28 +69,6 @@ io.sockets.on('connection',
       socket.broadcast.to(receiver).emit('image', data);
     });
 
-    // listen for 'position' event then emit to other sockets
-    socket.on('position', function(data) {
-      socket.emit('position', data);
-    })
-
-    // When this user emits, client side: socket.emit('otherevent',some data);
-    socket.on('otherevent', function(data) {
-      // Data comes in as whatever was sent, including objects
-      console.log("Received: 'otherevent' " + data);
-    });
-
-    /*
-    //SAY WHO YOU ARE PARTNERED WITH
-    socket.on('istyping', function () {
-      let room = socket.room;
-      socket.to(room).emit('istyping');
-    });
-    */
-
-    //SAY WHEN PARTNER LEFT ROOM
-    // Listen for this client to disconnect
-    // Tell partners this client disconnected
     socket.on('disconnect', function() {
       console.log("Client has disconnected " + socket.id);
 

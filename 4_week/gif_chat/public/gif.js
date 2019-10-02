@@ -3,6 +3,8 @@ let socket = io.connect();
 let start = null;
 let index = 0;
 let latest;
+let row = -1;
+let globalArr = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V"];
 
 
 //FROM PREVIOUS SKETCH FOR SOCKET ROOMS + USERNAME
@@ -32,6 +34,11 @@ socket.on('connectedUsername', function(user) {
   displayUsername(`You're connected to ${otherUser}`);
 });
 
+socket.on('leave room', function() {
+  console.log('(they left...)');
+  displayUsername('(they left...)');
+});
+
 // GIF
 socket.on('image', function(imageData) {
   //incoming image..
@@ -39,6 +46,7 @@ socket.on('image', function(imageData) {
   // console.log("imageData.image: " + imageData.image);
   latest = 0;
   latest = imageData.image;
+  displayFrames(latest);
 
   window.requestAnimationFrame(step);
 
@@ -66,16 +74,25 @@ socket.on('image', function(imageData) {
   }
 });
 
+function displayFrames(e) {
+  row++;
+  let frames = e;
+  for (i = 0; i < 10; i++) {
+    let newElem = document.createElement(`frame_${i}_row_${row}`)
+    document.body.appendChild(newElem);
+  }
+}
+
 // DISPLAY USERNAME
 function displayUsername(data) {
   // removeElements();
   document.getElementById('usernameText').innerHTML = data;
 }
 
-function displayImage(data) {
-  // removeElements();
-  document.getElementById('partner-canvas').innerHTML = data;
-}
+// function displayImage(data) {
+// removeElements();
+// document.getElementById('partner-canvas').innerHTML = data;
+// }
 
 
 ////////////  ONCE PG LOADED  //////////////
@@ -165,21 +182,21 @@ window.addEventListener('load', function() {
     let v = {
       image: gif
     }
-
+    displayFrames(gif);
     console.log(v);
     socket.emit('image', v);
+    // console.log(gif[0]);
     //v returns array of images
     gif = [];
   });
 
 
   // Listen for img from partners
-  socket.on('img', function(data) {
-    displayImage(data);
-  });
+  // socket.on('img', function(data) {
+  //   displayImage(data);
+  // });
 
 });
-
 
 
 
