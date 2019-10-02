@@ -44,7 +44,7 @@ socket.on('image', function(imageData) {
   // console.log("imageData.image: " + imageData.image);
   latest = 0;
   latest = imageData.image;
-  displayFrames(latest);
+  // displayFrames(latest);
 
   window.requestAnimationFrame(step);
 
@@ -72,14 +72,14 @@ socket.on('image', function(imageData) {
   }
 });
 
-function displayFrames(e) {
-  row++;
-  let frames = e;
-  for (i = 0; i < 10; i++) {
-    let newElem = document.createElement(`frame_${i}_row_${row}`)
-    document.body.appendChild(newElem);
-  }
-}
+// function displayFrames(e) {
+//   row++;
+//   let frames = e;
+//   for (i = 0; i < 10; i++) {
+//     let newElem = document.createElement(`frame_${i}_row_${row}`)
+//     document.body.appendChild(newElem);
+//   }
+// }
 
 // DISPLAY USERNAME
 function displayUsername(data) {
@@ -180,7 +180,7 @@ window.addEventListener('load', function() {
     let v = {
       image: gif
     }
-    displayFrames(gif);
+    // displayFrames(gif);
     console.log(v);
     socket.emit('image', v);
     // console.log(gif[0]);
