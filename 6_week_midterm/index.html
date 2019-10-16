@@ -13,13 +13,34 @@
       display: none;
     }
 		.remoteAudio{
-
+			position: absolute;
+		  left: 30px;
+		  top: 70px;
 		}
 		.remoteVideo{
-
+			position: absolute;
+			left: 30px;
+		  top: 70px;
 		}
 		.remoteScreen{
-
+			position: absolute;
+			left: 30px;
+		  top: 70px;
+		}
+		#chatbox{
+			margin-left: 85%;
+			display: inline-block;
+			vertical-align:top;
+			overflow: auto;
+		}
+		#messages{
+			margin-left: 85%;
+			display: inline-block;
+			vertical-align:top;
+			overflow: auto;
+		}
+		.buttons{
+			margin-top: 0%;
 		}
   </style>
 	<script src="peer.min.js"></script>
@@ -141,14 +162,6 @@
 			console.log(err);
 		});
 
-		// peer.on('call', function(incoming_call) {
-		// 	incoming_call.answer(my_stream1);
-		// });
-		//
-		// peer.on('call', function(incoming_call) {
-		// 	incoming_call.answer(my_stream2);
-		// });
-
 		peer.on('call', function(incoming_call) {
 			incoming_call.answer(peer_stream);
 		});
@@ -160,8 +173,7 @@
 		var sendmessage = function() {
 			var message = document.getElementById('message').value;
 			console.log("Sending: " + message);
-
-			// Send a messaage
+			document.getElementById('messages').innerHTML += message + "<br>";
 			socket.send(message);
 		};
 
@@ -169,8 +181,9 @@
 			console.log("screen share funciton entered");
 			peer_stream = my_stream1;
 			socket.emit('screenShare');
-			closeStream();
+			// closeStream();
 			// audioShare();
+			document.getElementById("video_button").style.display = "none";
 			let e = document.getElementById("remoteScreen");
 			call1 = peer.call(partner_peer_id, my_stream1);
 			call1.on('stream', function(remoteStream) {
@@ -182,7 +195,7 @@
 					screenVideoElement.setAttribute("autoplay", "true");
 					screenVideoElement.play();
 					document.body.appendChild(screenVideoElement);
-					document.getElementById("screen_button").style.display = "none";
+					// document.getElementById("screen_button").style.display = "none";
 					document.getElementById("video_button").style.display = "none";
 				}
 				console.log("sharing screen with peer");
@@ -231,6 +244,7 @@
 		}
 
 		function closeStream() {
+			peer_stream = null;
 			socket.emit('closeStream');
 			if (call1) {
 				call1.close();
@@ -261,8 +275,11 @@
 
 		function screenShare2(id) {
 			console.log("your screen being share right now");
-			document.getElementById("screen_button").style.display = "none";
 			document.getElementById("video_button").style.display = "none";
+			let r = document.getElementById("remoteScreen");
+			if (r) {
+				r.parentNode.removeChild(r);
+			}
 		}
 
 		function audioShare2(id) {
@@ -307,6 +324,7 @@
 		}
 
 		function closeStream2() {
+			peer_stream = null;
 			if (call1) {
 				call1.close();
 				call1 = null;
@@ -345,13 +363,14 @@
 	<video id="myaudio"></video>
 	<video id="myvideo"></video>
 	<div>
+		<input type="button" id="screen_button" class="buttons" value="Screen" onclick="screenShare();">
+		<input type="button" id="audio_button" class="buttons" value="Audio" onclick="audioShare();">
+		<input type="button" id="video_button" class="buttons" value="Video" onclick="videoShare();">
+		<input type="button" id="close_button" class="buttons" value="close" onclick="closeStream();">
+	</div>
+	<div id="chatbox">
 		<input type="text" id="message" name="message">
 		<input type="button" value="send!" onclick="sendmessage();">
-		<p>
-			<input type="button" id="screen_button" value="Screen" onclick="screenShare();">
-			<input type="button" id="audio_button" value="Audio" onclick="audioShare();">
-			<input type="button" id="video_button" value="Video" onclick="videoShare();">
-			<input type="button" id="close_button" value="close" onclick="closeStream();">
 	</div>
 	<div id="messages">
 	</div>
