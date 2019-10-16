@@ -1,0 +1,152 @@
+<html>
+
+<head>
+
+  <style media="screen">
+    video#myvideo {
+      display: none;
+    }
+  </style>
+  <script src="peer.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+
+  <script type="text/javascript">
+    var socket = io.connect();
+
+    socket.on('connect', function() {
+      console.log("Connected");
+    });
+
+    // Receive a message
+    socket.on('message', function(data) {
+      // console.log("Got: " + data);
+      document.getElementById('messages').innerHTML += "<br>" + data;
+    });
+
+    var sendmessage = function() {
+      var message = document.getElementById('message').value;
+      // console.log("Sending: " + message);
+
+      // Send a messaage
+      socket.send(message);
+    };
+
+    var tring = function() {
+      console.log("sending tring tring...");
+      socket.emit('tring', function(e) {});
+    }
+
+    // var sendother = function() {
+    //   var othermessage = document.getElementById('message').value;
+    //   console.log("sending: " + othermessage);
+    //
+    //   // Send any kind of data with a custom event
+    //   //socket.emit('otherevent',{ othermessage: othermessage });
+    //   socket.emit('otherevent', othermessage);
+    // };
+
+    var peer_id = null;
+    var peer = new Peer('tushar', {
+      host: 'liveweb-new.itp.io',
+      port: 9000,
+      path: '/'
+    });
+
+    // Get an ID from the PeerJS server
+    peer.on('open', function(id) {
+      console.log('My peer ID is: ' + id);
+      peer_id = id;
+    });
+
+    peer.on('error', function(err) {
+      console.log(err);
+    });
+
+    peer.on('call', function(incoming_call) {
+      console.log("Got a call!");
+      incoming_call.answer(my_stream2); // Answer the call with our stream from getUserMedia
+      incoming_call.on('stream', function(remoteStream) { // we receive a getUserMedia stream from the remote caller
+        var ovideoElement = document.createElement('video');
+        ovideoElement.srcObject = remoteStream;
+        ovideoElement.setAttribute("autoplay", "true");
+        ovideoElement.play();
+        document.body.appendChild(ovideoElement);
+      });
+    });
+
+    // function makeCall_sc(idToCall) {
+    //   var call = peer.call(idToCall, my_stream1);
+    //
+    //   call.on('stream', function(remoteStream) {
+    //     console.log("Got remote stream");
+    //     var ovideoElement = document.createElement('video');
+    //     ovideoElement.srcObject = remoteStream;
+    //     ovideoElement.setAttribute("autoplay", "true");
+    //     ovideoElement.play();
+    //     document.body.appendChild(ovideoElement);
+    //   });
+    // }
+
+    function makeCall_au(idToCall) {
+      var call = peer.call(idToCall, my_stream2);
+
+      call.on('stream', function(remoteStream) {
+        console.log("Got remote stream");
+        var o0videoElement = document.createElement('video');
+        o0videoElement.srcObject = remoteStream;
+        o0videoElement.setAttribute("autoplay", "true");
+        o0videoElement.play();
+        document.body.appendChild(o0videoElement);
+      });
+    }
+
+    let my_stream1 = null;
+    let my_stream2 = null;
+
+    let constraints1 = { //screen
+      audio: true,
+      video: true
+    }
+
+    let constraints2 = { //audio
+      audio: true,
+      video: true
+    }
+
+    window.addEventListener('load', function() {
+      navigator.mediaDevices.getDisplayMedia(constraints1).then(function(stream1) {
+          var videoElement = document.getElementById('myvideo');
+          videoElement.srcObject = stream1;
+          my_stream1 = stream1;
+        })
+        .catch(function(err) {
+          alert(err);
+        });
+
+      navigator.mediaDevices.getUserMedia(constraints2).then(function(stream2) {
+          var videoElement = document.getElementById('myaudio');
+          videoElement.srcObject = stream2;
+          my_stream2 = stream2;
+        })
+        .catch(function(err) {
+          alert(err);
+        });
+    });
+  </script>
+</head>
+
+<body>
+  <div id="messages">
+  </div>
+  <div>
+    <input type="text" id="message" name="message">
+    <input type="button" value="message" onclick="sendmessage();">
+    <input type="button" value="call shawn" onclick="tring();">
+  </div>
+
+  <video id="myvideo"></video>
+  <video id="myaudio"></video>
+
+</body>
+
+</html>

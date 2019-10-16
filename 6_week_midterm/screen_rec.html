@@ -1,0 +1,234 @@
+<html>
+
+<head>
+
+  <style media="screen">
+    video#myvideo {
+      display: none;
+    }
+    #answer_button {
+      display: none;
+    }
+    #hangup_button {
+      display: none;
+    }
+  </style>
+  <script src="peer.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+
+  <script type="text/javascript">
+    //tushar
+    let incomingcall = false;
+    let outgoingcall = false;
+    let callinprogress = false;
+    let lineclear = true;
+    var audio = new Audio('phone_message.wav');
+    var socket = io.connect();
+
+    socket.on('connect', function() {
+      console.log("Connected");
+    });
+
+    var tring = function() {
+      outgoingcall = true;
+      lineclear = false;
+      console.log("calling...");
+      socket.emit('tring', function(e) {});
+      document.getElementById('call_button').style.display = "none";
+      document.getElementById('answer_button').style.display = "none";
+      document.getElementById('hangup_button').style.display = "inline";
+    }
+
+    socket.on('tring', function(e) {
+      if (lineclear) {
+        incomingcall = true;
+        lineclear = false;
+        document.getElementById('call_button').style.display = "none";
+        document.getElementById('answer_button').style.display = "inline";
+        document.getElementById('hangup_button').style.display = "inline";
+        // window.alert("you're getting call! answer using the button on the page!")
+        setInterval(function() {
+          if (incomingcall && !outgoingcall && !callinprogress) {
+            audio.play();
+            console.log("incoming!");
+          }
+        }, 3000);
+      }
+    });
+
+    var hangUp = function() {
+      console.log("hanging up...");
+      socket.emit('hangup', function(e) {
+        document.getElementById('call_button').style.display = "inline";
+        document.getElementById('answer_button').style.display = "none";
+        document.getElementById('hangup_button').style.display = "none";
+      });
+      // outgoingcall = false;
+    }
+
+    socket.on('hangup', function(e) {
+      // window.alert("you're getting call! answer using the button on the page!")
+      if (incomingcall && !outgoingcall && !callinprogress) {
+        audio.pause();
+        incomingcall = false;
+      }
+      if (!incomingcall && outgoingcall && !callinprogress) {
+        outgoingcall = false;
+      }
+      document.getElementById('call_button').style.display = "inline";
+      document.getElementById('answer_button').style.display = "none";
+      document.getElementById('hangup_button').style.display = "none";
+      console.log("call disconnected");
+      lineclear = true;
+    });
+
+    // socket.on('callerhungup', function(e) {
+    //   document.getElementById('answer_button').style.display = "none";
+    // });
+
+    socket.on('message', function(data) {
+      document.getElementById('messages').innerHTML += "<br>" + data;
+    });
+
+    var sendmessage = function() {
+      var message = document.getElementById('message').value;
+      socket.send(message);
+    };
+
+    var answerCall = function() {
+      audio.pause();
+      document.getElementById('answer_button').style.display = "none";
+      callinprogress = true;
+      lineclear = false;
+      shareAudio(static_id);
+      console.log("call connected!");
+    }
+
+    var peer_id = null;
+    var static_id = "shawn";
+    var peer = new Peer('tushar', {
+      host: 'liveweb-new.itp.io',
+      port: 9000,
+      path: '/'
+    });
+
+    function callShawn() {
+      // console.log("here: " + static_id);
+      shareAudio(static_id);
+    }
+
+    // function shareScreen(idToCall) {
+    //   var call = peer.call(idToCall, my_stream1);
+    //
+    //   call.on('stream', function(remoteStream) {
+    //     console.log("Got remote stream");
+    //     var ovideoElement = document.createElement('video');
+    //     ovideoElement.srcObject = remoteStream;
+    //     ovideoElement.setAttribute("autoplay", "true");
+    //     ovideoElement.play();
+    //     document.body.appendChild(ovideoElement);
+    //   });
+    // }
+
+    function shareAudio(idToCall) {
+      var call = peer.call(idToCall, my_stream3);
+
+      call.on('stream', function(remoteStream) {
+        console.log("Got remote stream");
+        var ovideoElement = document.createElement('video');
+        ovideoElement.srcObject = remoteStream;
+        ovideoElement.setAttribute("autoplay", "true");
+        ovideoElement.play();
+        document.body.appendChild(ovideoElement);
+      });
+    }
+
+    let my_stream1 = null; //screen
+    let my_stream2 = null; //audio
+    let my_stream3 = null; //video
+
+    let constraints1 = { //screen
+      audio: true,
+      video: true
+    }
+
+    let constraints2 = { //audio
+      audio: true,
+      video: false
+    }
+
+    let constraints3 = { //video
+      audio: true,
+      video: true
+    }
+
+    window.addEventListener('load', function() {
+      navigator.mediaDevices.getDisplayMedia(constraints1).then(function(stream1) {
+          var videoElement1 = document.getElementById('myscreen');
+          videoElement1.srcObject = stream1;
+          my_stream1 = stream1;
+        })
+        .catch(function(err) {
+          alert(err);
+        });
+
+      navigator.mediaDevices.getUserMedia(constraints2).then(function(stream2) {
+          var videoElement2 = document.getElementById('myaudio');
+          videoElement2.srcObject = stream2;
+          my_stream2 = stream2;
+        })
+        .catch(function(err) {
+          alert(err);
+        });
+
+      navigator.mediaDevices.getUserMedia(constraints3).then(function(stream3) {
+          var videoElement3 = document.getElementById('myvideo');
+          videoElement3.srcObject = stream3;
+          my_stream3 = stream3;
+        })
+        .catch(function(err) {
+          alert(err);
+        });
+    });
+
+    // Get an ID from the PeerJS server
+    peer.on('open', function(id) {
+      console.log('My peer ID is: ' + id);
+      peer_id = id;
+    });
+
+    peer.on('error', function(err) {
+      console.log(err);
+    });
+
+    peer.on('call', function(incoming_call) {
+      console.log("Got a call!");
+      incoming_call.answer(my_stream3); // Answer the call with our stream from getUserMedia
+      incoming_call.on('stream', function(remoteStream) { // we receive a getUserMedia stream from the remote caller
+        var ovideoElement = document.createElement('video');
+        ovideoElement.srcObject = remoteStream;
+        ovideoElement.setAttribute("autoplay", "true");
+        ovideoElement.play();
+        document.body.appendChild(ovideoElement);
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <div id="messages">
+  </div>
+  <div>
+    <input type="text" id="message" name="message">
+    <input type="button" value="message" onclick="sendmessage();">
+    <p>
+      <input type="button" id="call_button" value="call" onclick="tring();">
+      <input type="button" id="answer_button" value="answer" onclick="answerCall();">
+      <input type="button" id="hangup_button" value="hang up" onclick="hangUp();">
+  </div>
+  <video id="myscreen"></video>
+  <video id="myaudio"></video>
+  <video id="myvideo"></video>
+</body>
+
+</html>

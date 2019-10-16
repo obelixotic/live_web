@@ -1,4 +1,5 @@
 //fs over remote server with add/del/rename and sync on first run capability
+//node server.js ./public root@xxx.xxx.xxx.xxx live_web/week5
 var myArgs = process.argv.slice(2);
 console.log('myArgs: ', myArgs);
 
@@ -7,7 +8,7 @@ const {
 } = require('child_process');
 const fs = require('fs');
 // const watchdir = './public';
-// const remote_server = 'root@198.211.97.177';
+// const remote_server = 'root@xxx.xxx.xxx.xxx';
 // const remote_dir = 'live_web/public/';
 const watchdir = myArgs[0]; //arg 1
 const remote_server = myArgs[1]; //arg 2

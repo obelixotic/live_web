@@ -61,9 +61,9 @@ socket.on('image', function(imageData) {
       // console.log('latest index: ' + latest[index]);
       document.getElementById('otherimage').src = latest[index];
 
-      if (index < latest.length) {
+      if (index < latest.length - 1) {
         index++;
-      } else if (index == latest.length) {
+      } else if (index == latest.length - 1) {
         index = 0;
         start = timestamp;
       }
@@ -165,7 +165,7 @@ window.addEventListener('load', function() {
   photoBttn.addEventListener('click', function(e) {
     for (i = 0; i < 10; i++) {
       setTimeout(function() {
-        context.drawImage(video, 10, 10);
+        context.drawImage(video, 0, 0);
         gif.push(canvas.toDataURL("image/jpeg"));
       }, 200 * i);
     }
@@ -188,41 +188,4 @@ window.addEventListener('load', function() {
     gif = [];
   });
 
-
-  // Listen for img from partners
-  // socket.on('img', function(data) {
-  //   displayImage(data);
-  // });
-
 });
-
-
-
-///////////////* DUMPSTER CODE *///////////////
-/* FROM SHAWN EX
-var sendmessage = function () {
-    var message = document.getElementById('message').value;
-    console.log("Sending: " + message);
-
-    // Send a messaage
-    socket.send(message);
-};
-
-var sendother = function () {
-    var othermessage = document.getElementById('message').value;
-    console.log("sending: " + othermessage);
-
-    // Send any kind of data with a custom event
-    //socket.emit('otherevent',{ othermessage: othermessage });
-    socket.emit('otherevent', othermessage);
-};
-*/
-
-
-/* FROM SHAWN EX
-//listen for a message
-socket.on('message', function (data) {
-    console.log("Got: " + data);
-    document.getElementById('messages').innerHTML += data;
-});
-*/

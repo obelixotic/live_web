@@ -67,7 +67,7 @@ io.sockets.on('connection', function(socket) {
 
     // Share data to all members of room
     socket.to(room).emit('text', data);
-    // console.log(data); //cipher text
+    console.log(data); //cipher text
   });
 
   socket.on('istyping', function() {

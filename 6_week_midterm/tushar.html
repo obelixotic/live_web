@@ -1,0 +1,193 @@
+<html>
+
+<head>
+
+  <style media="screen">
+    video#myscreen {
+    display: none;
+  }
+  video#myaudio {
+    display: none;
+  }
+  video#myvideo {
+    display: none;
+  }
+  </style>
+  <script src="peer.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+
+  <script type="text/javascript">
+    var audio = new Audio('phone_message.wav');
+    var answer_call = false;
+    var socket = io.connect();
+    var peer_static_id = "shawn";
+    var peer_id = null;
+    var peer = new Peer('tushar', {
+      host: 'liveweb-new.itp.io',
+      port: 9000,
+      path: '/'
+    });
+
+    var call1 = null;
+    var call2 = null;
+    var call3 = null;
+
+    socket.on('connect', function() {
+      console.log("Connected");
+    });
+
+    let my_stream1 = null; //screen
+    let my_stream2 = null; //audio
+    let my_stream3 = null; //video
+
+    let constraints1 = { //screen
+      audio: true,
+      video: true
+    }
+
+    let constraints2 = { //audio
+      audio: true,
+      video: false
+    }
+
+    let constraints3 = { //video
+      audio: false,
+      video: true
+    }
+
+    window.addEventListener('load', function() {
+      navigator.mediaDevices.getDisplayMedia(constraints1).then(function(stream1) {
+          var videoElement1 = document.getElementById('myscreen');
+          videoElement1.srcObject = stream1;
+          my_stream1 = stream1;
+        })
+        .catch(function(err) {
+          alert(err);
+        });
+
+      navigator.mediaDevices.getUserMedia(constraints2).then(function(stream2) {
+          var videoElement2 = document.getElementById('myaudio');
+          videoElement2.srcObject = stream2;
+          my_stream2 = stream2;
+        })
+        .catch(function(err) {
+          alert(err);
+        });
+
+      navigator.mediaDevices.getUserMedia(constraints3).then(function(stream3) {
+          var videoElement3 = document.getElementById('myvideo');
+          videoElement3.srcObject = stream3;
+          my_stream3 = stream3;
+        })
+        .catch(function(err) {
+          alert(err);
+        });
+    });
+
+    // Get an ID from the PeerJS server
+    peer.on('open', function(id) {
+      console.log('My peer ID is: ' + id);
+      peer_id = id;
+    });
+
+    peer.on('error', function(err) {
+      console.log(err);
+    });
+
+    peer.on('call', function(incoming_call) {
+      incoming_call.answer(my_stream3);
+      incoming_call.on('stream', function(remoteStream) {
+        var ovideoElement = document.createElement('video');
+        ovideoElement.srcObject = remoteStream;
+        ovideoElement.setAttribute("autoplay", "true");
+        ovideoElement.play();
+        document.body.appendChild(ovideoElement);
+      });
+    });
+
+    function screenShare() {
+      closeStream();
+      document.getElementById("myscreen").style.display = "inline";
+      console.log("sharing screen with tushar");
+      call1 = peer.call(peer_static_id, my_stream1);
+      call1.on('stream', function(remoteStream) {
+        console.log("Got remote stream");
+        var screenVideoElement = document.createElement('video');
+        screenVideoElement.srcObject = remoteStream;
+        screenVideoElement.id = "remoteScreen";
+        screenVideoElement.setAttribute("autoplay", "true");
+        screenVideoElement.play();
+        document.body.appendChild(screenVideoElement);
+      });
+    }
+
+    function audioShare() {
+      closeStream();
+      document.getElementById("myaudio").style.display = "inline";
+      console.log("sharing audio with tushar");
+      call2 = peer.call(peer_static_id, my_stream2);
+      call2.on('stream', function(remoteStream) {
+        console.log("Got remote stream");
+        var audioVideoElement = document.createElement('video');
+        audioVideoElement.srcObject = remoteStream;
+        audioVideoElement.id = "remoteAudio";
+        audioVideoElement.setAttribute("autoplay", "true");
+        audioVideoElement.play();
+        document.body.appendChild(audioVideoElement);
+      });
+    }
+
+    function videoShare() {
+      closeStream();
+      document.getElementById("myvideo").style.display = "inline";
+      console.log("sharing video with tushar");
+      call3 = peer.call(peer_static_id, my_stream3);
+      call3.on('stream', function(remoteStream) {
+        console.log("Got remote stream");
+        var videoVideoElement = document.createElement('video');
+        videoVideoElement.srcObject = remoteStream;
+        videoVideoElement.id = "remoteVideo";
+        videoVideoElement.setAttribute("autoplay", "true");
+        videoVideoElement.play();
+        document.body.appendChild(videoVideoElement);
+      });
+    }
+
+    function closeStream() {
+      if (call1 != null) {
+        call1.close();
+        call1 = null;
+        document.getElementById("myscreen").style.display = "none";
+      }
+      if (call2 != null) {
+        call2.close();
+        call2 = null;
+        document.getElementById("myaudio").style.display = "none";
+      }
+      if (call3 != null) {
+        call3.close();
+        call3 = null;
+        document.getElementById("myvideo").style.display = "none";
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <div id="messages">
+  </div>
+  <div>
+    <input type="text" id="message" name="message">
+    <input type="button" value="message" onclick="sendmessage();">
+    <p>
+      <input type="button" id="screen_button" value="Screen" onclick="screenShare();">
+      <input type="button" id="audio_button" value="Audio" onclick="audioShare();">
+      <input type="button" id="video_button" value="Video" onclick="videoShare();">
+      <input type="button" id="close_button" value="close" onclick="closeStream();">
+  </div>
+  <video id="myscreen"></video>
+  <video id="myaudio"></video>
+  <video id="myvideo"></video>
+</body>
+
+</html>

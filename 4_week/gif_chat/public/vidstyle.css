@@ -1,3 +1,7 @@
+#username {
+  visibility: hidden;
+}
+
 #inputText {
   z-index: 3;
   position: fixed;
@@ -9,7 +13,7 @@
   font-size: 2vw;
   font-family: sans-serif;
   background: yellow;
-  /* visibility: hidden; */
+  visibility: hidden;
 }
 
 #usernameText {
@@ -23,7 +27,7 @@
   font-size: 2vw;
   font-family: sans-serif;
   background: blue;
-  /* visibility: hidden; */
+  visibility: hidden;
 }
 
 #partner-canvas {
@@ -32,8 +36,31 @@
 
 #mycanvas {
   border: 2px yellow solid;
+  visibility: hidden;
 }
 
 #otherimage {
   border: 2px yellow solid;
+}
+
+#myvideo {
+  height: 50%;
+  width: auto;
+}
+
+#otherimage {
+  height: 80%;
+  width: auto;
+}
+
+#playbttn {
+  /* position: fixed;
+  margin-top: 500px;
+  margin-left: 200px; */
+}
+
+#photoBttn {
+  /* position: fixed;
+  margin-top: 500px;
+  margin-left: 220px; */
 }

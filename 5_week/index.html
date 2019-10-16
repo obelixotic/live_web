@@ -3,11 +3,7 @@
 <head>
 	<script src="/socket.io/socket.io.js"></script>
 	<script>
-		var gif = [];
 		var socket = io.connect();
-		var start = null;
-		var index = 0;
-		var latest;
 
 			socket.on('connect', function() {
 				console.log("Connected");
@@ -30,37 +26,8 @@
 
 			socket.on('image', function(imageData) {
 				// Incoming image..
-				console.log("image recd");
-				// console.log(imageData.image);
-				latest = 0;
-				latest = imageData.image;
-				console.log(latest);
-
-				window.requestAnimationFrame(step);
-
-				function step(timestamp) {
-					// console.log("entered function, index :  " + index);
-					if (!start) start = timestamp;
-					var progress = timestamp - start;
-					// console.log("progress: " + progress);
-					if (progress > 200*index) {
-						console.log(index);
-						document.getElementById('otherimage').src = latest[index];
-						// window.requestAnimationFrame(step);
-
-						if(index<latest.length){
-							// window.requestAnimationFrame(step);
-							// console.log("++");
-							index++;
-						}
-						 else if(index==latest.length){
-							// console.log("zero'd");
-							index = 0;
-							start = timestamp;
-						}
-					}
-					window.requestAnimationFrame(step);
-				}
+				console.log(imageData.image);
+				document.getElementById('otherimage').src = imageData.image;
 			});
 
 			var sendmessage = function() {
@@ -90,7 +57,7 @@
 				let constraints = { audio: true, video: true }
 
 				// Prompt the user for permission, get the stream
-				navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
+				navigator.mediaDevices.getDisplayMedia(constraints).then(function(stream) {
 					/* Use the stream */
 
 					// Attach to our video object
@@ -106,51 +73,39 @@
 					alert(err);
 				});
 
+
+
 					var canvas = document.getElementById('mycanvas');
 					var context = canvas.getContext('2d');
 					context.fillStyle="#FF0000";
 					context.fillRect(0,0,canvas.width,canvas.height);
 
 					window.addEventListener('click', function(e) {
-						for(i=0; i<10; i++){
-							setTimeout(function(){
-								context.drawImage(video, 10, 10);
-								gif.push(canvas.toDataURL("image/jpeg"));
-							},200*i);
-						}
-						// context.drawImage(video, 10, 10);
-						// console.log(canvas.toDataURL("image/jpeg"));
-						// gif.push(canvas.toDataURL("image/jpeg"));
-					});
-
-					window.addEventListener('keypress', function(e){
-						// console.log(gif);
+						context.drawImage(video, 10, 10);
+						//console.log(canvas.toDataURL("image/jpeg"));
 						let v = {
-							image: gif
+							image: canvas.toDataURL("image/jpeg")
 						}
-						console.log(v);
+
 						socket.emit('image', v);
-						gif = [];
-						// console.log("post " + gif);
-						// console.log("post " + v);
 					});
 
-        // window.addEventListener('mousemove', function(e) {
-        //   //console.log(e);
-        //   let p = {
-        //     x: e.pageX,
-        //     y: e.pageY
-        //   };
-				//
-        //   socket.emit('position', p);
-				//
-        //   // let p = new Object();
-        //   // p.x = e.pageX;
-        //   // p.y = e.pageY;
-				//
-        //   // e.pageX
-        //   // e.pageY
-        // });
+        window.addEventListener('mousemove', function(e) {
+          //console.log(e);
+          let p = {
+            x: e.pageX,
+            y: e.pageY
+          };
+
+          socket.emit('position', p);
+
+          // let p = new Object();
+          // p.x = e.pageX;
+          // p.y = e.pageY;
+
+          // e.pageX
+          // e.pageY
+        });
       });
 
 		</script>
