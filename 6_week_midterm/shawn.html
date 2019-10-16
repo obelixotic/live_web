@@ -40,9 +40,20 @@
 		var call1 = null;
 		var call2 = null;
 		var call3 = null;
+		var screenBeingShared = false;
 
 		socket.on('connect', function() {
 			console.log("Connected");
+		});
+
+		socket.on('message', function(data) {
+			console.log("Got: " + data);
+			document.getElementById('messages').innerHTML += data + "<br>";
+		});
+
+		socket.on('screenShare', function() {
+			screenShare2(partner_peer_id);
+			console.log('recd screen share socket event');
 		});
 
 		socket.on('audioShare', function() {
@@ -146,13 +157,21 @@
 			console.log("close!!!");
 		});
 
+		var sendmessage = function() {
+			var message = document.getElementById('message').value;
+			console.log("Sending: " + message);
+
+			// Send a messaage
+			socket.send(message);
+		};
+
 		function screenShare(id) {
+			console.log("screen share funciton entered");
 			peer_stream = my_stream1;
-			// closeStream();
+			socket.emit('screenShare');
+			closeStream();
 			// audioShare();
 			let e = document.getElementById("remoteScreen");
-			document.getElementById("screen_button").style.display = "none";
-			console.log("sharing screen with peer");
 			call1 = peer.call(partner_peer_id, my_stream1);
 			call1.on('stream', function(remoteStream) {
 				console.log("Got remote stream");
@@ -163,7 +182,10 @@
 					screenVideoElement.setAttribute("autoplay", "true");
 					screenVideoElement.play();
 					document.body.appendChild(screenVideoElement);
+					document.getElementById("screen_button").style.display = "none";
+					document.getElementById("video_button").style.display = "none";
 				}
+				console.log("sharing screen with peer");
 			});
 		}
 
@@ -192,6 +214,7 @@
 			socket.emit('videoShare');
 			let e = document.getElementById("remoteVideo");
 			document.getElementById("video_button").style.display = "none";
+			document.getElementById("screen_button").style.display = "none";
 			console.log("sharing video with peer");
 			call3 = peer.call(partner_peer_id, my_stream3);
 			call3.on('stream', function(remoteStream) {
@@ -233,36 +256,52 @@
 			document.getElementById("screen_button").style.display = "inline";
 			document.getElementById("audio_button").style.display = "inline";
 			document.getElementById("video_button").style.display = "inline";
+			// screenBeingShared = false;
+		}
+
+		function screenShare2(id) {
+			console.log("your screen being share right now");
+			document.getElementById("screen_button").style.display = "none";
+			document.getElementById("video_button").style.display = "none";
 		}
 
 		function audioShare2(id) {
 			peer_stream = my_stream2;
-			console.log("sharing audio with peer");
+			let e = document.getElementById("remoteAudio");
+			document.getElementById("audio_button").style.display = "none";
 			call2 = peer.call(partner_peer_id, my_stream2);
 			call2.on('stream', function(remoteStream) {
 				console.log("Got remote stream");
-				var audioVideoElement = document.createElement('video');
-				audioVideoElement.srcObject = remoteStream;
-				audioVideoElement.id = "remoteAudio";
-				audioVideoElement.setAttribute("autoplay", "true");
-				audioVideoElement.play();
-				document.body.appendChild(audioVideoElement);
+				if (!e) {
+					var audioVideoElement = document.createElement('video');
+					audioVideoElement.srcObject = remoteStream;
+					audioVideoElement.id = "remoteAudio";
+					audioVideoElement.setAttribute("autoplay", "true");
+					audioVideoElement.play();
+					document.body.appendChild(audioVideoElement);
+					// screenBeingShared = true;
+				}
 			});
 			console.log("Sharing audio in response");
 		}
 
 		function videoShare2(id) {
 			peer_stream = my_stream3;
+			let e = document.getElementById("remoteVideo");
+			document.getElementById("video_button").style.display = "none";
+			document.getElementById("screen_button").style.display = "none";
 			console.log("sharing video with peer");
 			call3 = peer.call(partner_peer_id, my_stream3);
 			call3.on('stream', function(remoteStream) {
 				console.log("Got remote stream");
-				var videoVideoElement = document.createElement('video');
-				videoVideoElement.srcObject = remoteStream;
-				videoVideoElement.id = "remoteVideo";
-				videoVideoElement.setAttribute("autoplay", "true");
-				videoVideoElement.play();
-				document.body.appendChild(videoVideoElement);
+				if (!e) {
+					var videoVideoElement = document.createElement('video');
+					videoVideoElement.srcObject = remoteStream;
+					videoVideoElement.id = "remoteVideo";
+					videoVideoElement.setAttribute("autoplay", "true");
+					videoVideoElement.play();
+					document.body.appendChild(videoVideoElement);
+				}
 			});
 			console.log("Sharing video in response");
 		}
@@ -272,7 +311,9 @@
 				call1.close();
 				call1 = null;
 				let r = document.getElementById("remoteScreen");
-				r.parentNode.removeChild(r);
+				if (r) {
+					r.parentNode.removeChild(r);
+				}
 			}
 			if (call2) {
 				call2.close();
@@ -287,28 +328,34 @@
 				r.parentNode.removeChild(r);
 			}
 			console.log("Closing stream in response");
+			// if (!screenBeingShared) {
 			document.getElementById("screen_button").style.display = "inline";
 			document.getElementById("audio_button").style.display = "inline";
 			document.getElementById("video_button").style.display = "inline";
+			// }
+			// document.getElementById("screen_button").style.display = "inline";
+			document.getElementById("audio_button").style.display = "inline";
+			// document.getElementById("video_button").style.display = "inline";
 		}
 	</script>
 </head>
 
 <body>
-	<div id="messages">
-	</div>
+	<video id="myscreen"></video>
+	<video id="myaudio"></video>
+	<video id="myvideo"></video>
 	<div>
 		<input type="text" id="message" name="message">
-		<input type="button" value="message" onclick="sendmessage();">
+		<input type="button" value="send!" onclick="sendmessage();">
 		<p>
 			<input type="button" id="screen_button" value="Screen" onclick="screenShare();">
 			<input type="button" id="audio_button" value="Audio" onclick="audioShare();">
 			<input type="button" id="video_button" value="Video" onclick="videoShare();">
 			<input type="button" id="close_button" value="close" onclick="closeStream();">
 	</div>
-	<video id="myscreen"></video>
-	<video id="myaudio"></video>
-	<video id="myvideo"></video>
+	<div id="messages">
+	</div>
+	<!--  -->
 </body>
 
 </html>

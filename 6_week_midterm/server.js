@@ -106,6 +106,11 @@ io.sockets.on('connection',
       // console.log(peer_ids);
     });
 
+    socket.on('screenShare', function() {
+      console.log('screenShare recd and sending...');
+      socket.broadcast.emit('screenShare');
+    });
+
     socket.on('audioShare', function() {
       console.log('audioShare recd and sending...');
       socket.broadcast.emit('audioShare');
