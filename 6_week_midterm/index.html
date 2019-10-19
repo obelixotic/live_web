@@ -12,35 +12,42 @@
 		video#myvideo {
       display: none;
     }
-		.remoteAudio{
+		#remoteAudio{
 			position: absolute;
 		  left: 30px;
 		  top: 70px;
 		}
-		.remoteVideo{
+		#remoteVideo{
 			position: absolute;
 			left: 30px;
 		  top: 70px;
 		}
-		.remoteScreen{
+		#remoteScreen{
 			position: absolute;
 			left: 30px;
 		  top: 70px;
 		}
 		#chatbox{
-			margin-left: 85%;
+			margin-left: 70%;
 			display: inline-block;
 			vertical-align:top;
-			overflow: auto;
+			overflow: hidden;
 		}
 		#messages{
-			margin-left: 85%;
+			height: 100%;
+			width: 400px;
+			padding: 10px;
+			margin: 10px;
+			margin-left: 70%;
 			display: inline-block;
 			vertical-align:top;
 			overflow: auto;
+			background-color: powderblue;
 		}
-		.buttons{
-			margin-top: 0%;
+		.buttons{}
+		.myMessages{
+			/* background-color: red; */
+			color: blue;
 		}
   </style>
 	<script src="peer.min.js"></script>
@@ -173,7 +180,11 @@
 		var sendmessage = function() {
 			var message = document.getElementById('message').value;
 			console.log("Sending: " + message);
-			document.getElementById('messages').innerHTML += message + "<br>";
+			let m = document.createElement('div');
+			m.setAttribute("class", "myMessages");
+			m.innerHTML += message + "<br>";
+			document.getElementById('messages').appendChild(m);
+			// document.getElementById('messages').innerHTML += message + "<br>";
 			socket.send(message);
 		};
 
@@ -374,7 +385,6 @@
 	</div>
 	<div id="messages">
 	</div>
-	<!--  -->
 </body>
 
 </html>

@@ -1,8 +1,9 @@
 <html>
-	<head>
-		<script src="/socket.io/socket.io.js"></script>
-		<script>
-			var socket = io.connect();
+
+<head>
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+		var socket = io.connect();
 
 			socket.on('connect', function() {
 				console.log("Connected");
@@ -98,29 +99,31 @@
 
           socket.emit('position', p);
 
-          // let p = new Object();
-          // p.x = e.pageX;
-          // p.y = e.pageY;
+          let p = new Object();
+          p.x = e.pageX;
+          p.y = e.pageY;
 
-          // e.pageX
-          // e.pageY
+          e.pageX
+          e.pageY
         });
       });
 
 		</script>
-	</head>
-	<body>
-		<video id="myvideo" width="400" height="300" muted></video>
-		<canvas width="600" height="600" id="mycanvas"></canvas>
-		<img id="otherimage" width="600" height="600" src="" />
+</head>
 
- 		<div id="messages">
-			No Messages Yet
-		</div>
-		<div>
-			<input type="text" id="message" name="message">
-			<input type="button" value="message" onclick="sendmessage();">
-			<input type="button" value="other" onclick="sendother();">
-		</div>
-	</body>
+<body>
+	<video id="myvideo" width="400" height="300" muted></video>
+	<canvas width="600" height="600" id="mycanvas"></canvas>
+	<img id="otherimage" width="600" height="600" src="" />
+
+	<div id="messages">
+		No Messages Yet
+	</div>
+	<div>
+		<input type="text" id="message" name="message">
+		<input type="button" value="message" onclick="sendmessage();">
+		<input type="button" value="other" onclick="sendother();">
+	</div>
+</body>
+
 </html>

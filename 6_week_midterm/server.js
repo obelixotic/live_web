@@ -89,12 +89,18 @@ io.sockets.on('connection',
     console.log("We have a new client: " + socket.id);
     socket_ids.push(socket.id);
 
-    socket.on('message',
-      function(data) {
-        console.log("message: " + data);
-        socket.broadcast.emit('message', data);
-      }
-    );
+    socket.on('message', function(data) {
+      console.log("message: " + data);
+      socket.broadcast.emit('message', data);
+    });
+
+    socket.on('position', function(data) {
+      socket.broadcast.emit('position', data);
+    });
+
+    socket.on('stopMouse', function(data) {
+      socket.broadcast.emit('stopMouse', data);
+    });
 
     socket.on('peer_id', function(data) {
       console.log("Received: peer_id " + data);
@@ -126,10 +132,14 @@ io.sockets.on('connection',
       socket.broadcast.emit('closeStream');
     });
 
-    socket.on('tring', function(data) {
+    socket.on('tring', function() {
       console.log("calling...");
-      let da = 1;
-      socket.broadcast.emit('tring', da);
+      socket.broadcast.emit('tring');
+    });
+
+    socket.on('answered', function() {
+      console.log("call answered");
+      socket.broadcast.emit('answered');
     });
 
     socket.on('hangup', function(data) {
