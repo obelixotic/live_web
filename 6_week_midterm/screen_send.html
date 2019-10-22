@@ -1,7 +1,6 @@
 <html>
 
 <head>
-
   <style media="screen">
     video#myvideo {
       display: none;
@@ -17,11 +16,9 @@
   <script src="/socket.io/socket.io.js"></script>
 
   <script type="text/javascript">
-    //shawn
     let incomingcall = false;
     let outgoingcall = false;
     let callinprogress = false;
-    let lineclear = true;
     var audio = new Audio('phone_message.wav');
     var socket = io.connect();
 
@@ -29,57 +26,37 @@
       console.log("Connected");
     });
 
-    var tring = function() {
-      outgoingcall = true;
-      lineclear = false;
-      console.log("calling...");
-      socket.emit('tring', function(e) {});
-      document.getElementById('call_button').style.display = "none";
-      document.getElementById('answer_button').style.display = "none";
-      document.getElementById('hangup_button').style.display = "inline";
-    }
-
     socket.on('tring', function(e) {
-      if (lineclear) {
-        incomingcall = true;
-        lineclear = false;
-        document.getElementById('call_button').style.display = "none";
-        document.getElementById('answer_button').style.display = "inline";
-        document.getElementById('hangup_button').style.display = "inline";
-        // window.alert("you're getting call! answer using the button on the page!")
-        setInterval(function() {
-          if (incomingcall && !outgoingcall && !callinprogress) {
-            audio.play();
-            console.log("incoming!");
-          }
-        }, 3000);
-      }
+      incomingcall = true;
+      document.getElementById('call_button').style.display = "none";
+      document.getElementById('answer_button').style.display = "inline";
+      document.getElementById('hangup_button').style.display = "inline";
+      // window.alert("you're getting call! answer using the button on the page!")
+      setInterval(function() {
+        if (incomingcall && !outgoingcall && !callinprogress) {
+          audio.play();
+          console.log("incoming!");
+        }
+      }, 3000);
     });
-
-    var hangUp = function() {
-      console.log("hanging up...");
-      socket.emit('hangup', function(e) {
-        document.getElementById('call_button').style.display = "inline";
-        document.getElementById('answer_button').style.display = "none";
-        document.getElementById('hangup_button').style.display = "none";
-      });
-      // outgoingcall = false;
-    }
 
     socket.on('hangup', function(e) {
       // window.alert("you're getting call! answer using the button on the page!")
       if (incomingcall && !outgoingcall && !callinprogress) {
         audio.pause();
+        console.log("missed call");
         incomingcall = false;
+        document.getElementById('call_button').style.display = "inline";
+        document.getElementById('answer_button').style.display = "none";
+        document.getElementById('hangup_button').style.display = "none";
+        // } else if (!incomingcall && outgoingcall && !callinprogress) {
+        // document.getElementById('call_button').style.display = "inline";
+        // document.getElementById('answer_button').style.display = "none";
+        // document.getElementById('hangup_button').style.display = "none";
+        // console.log("call hung up");
+        // socket.emit('callerhungup', function(e) {});
+        // outgoingcall = false;
       }
-      if (!incomingcall && outgoingcall && !callinprogress) {
-        outgoingcall = false;
-      }
-      document.getElementById('call_button').style.display = "inline";
-      document.getElementById('answer_button').style.display = "none";
-      document.getElementById('hangup_button').style.display = "none";
-      console.log("call disconnected");
-      lineclear = true;
     });
 
     // socket.on('callerhungup', function(e) {
@@ -95,44 +72,41 @@
       socket.send(message);
     };
 
-    var answerCall = function() {
-      audio.pause();
+    var tring = function() {
+      outgoingcall = true;
+      console.log("sending tring tring...");
+      socket.emit('tring', function(e) {});
+      document.getElementById('call_button').style.display = "none";
       document.getElementById('answer_button').style.display = "none";
-      callinprogress = true;
-      lineclear = false;
-      shareAudio(static_id);
-      console.log("call connected!");
+      document.getElementById('hangup_button').style.display = "inline";
     }
 
-    var peer_id = null;
-    var static_id = "tushar";
-    var peer = new Peer('shawn', {
-      host: 'liveweb-new.itp.io',
-      port: 9000,
-      path: '/'
-    });
+    var answerCall = function() {
+      if (incomingcall && !outgoingcall && !callinprogress) {
+        audio.pause();
+        incomingcall = false;
+        callinprogress = true;
+        shareAudio();
+        document.getElementById('answer_button').style.display = "none";
+      }
+    }
+
+    var stopTring = function() {
+      console.log("hanging up...");
+      socket.emit('hangup', function(e) {});
+      document.getElementById('call_button').style.display = "inline";
+      document.getElementById('hangup_button').style.display = "none";
+      outgoingcall = false;
+    }
 
     function callTushar() {
-      // console.log("here: " + static_id);
+      console.log("here: " + static_id);
+      shareScreen(static_id);
       shareAudio(static_id);
     }
 
-    // function shareScreen(idToCall) {
-    //   var call = peer.call(idToCall, my_stream1);
-    //
-    //   call.on('stream', function(remoteStream) {
-    //     console.log("Got remote stream");
-    //     var ovideoElement = document.createElement('video');
-    //     ovideoElement.srcObject = remoteStream;
-    //     ovideoElement.setAttribute("autoplay", "true");
-    //     ovideoElement.play();
-    //     document.body.appendChild(ovideoElement);
-    //   });
-    // }
-
-    function shareAudio(idToCall) {
-      console.log("share audio");
-      var call = peer.call(idToCall, my_stream3);
+    function shareScreen(idToCall) {
+      var call = peer.call(idToCall, my_stream1);
 
       call.on('stream', function(remoteStream) {
         console.log("Got remote stream");
@@ -141,6 +115,19 @@
         ovideoElement.setAttribute("autoplay", "true");
         ovideoElement.play();
         document.body.appendChild(ovideoElement);
+      });
+    }
+
+    function shareAudio(idToCall) {
+      var call = peer.call(idToCall, my_stream2);
+
+      call.on('stream', function(remoteStream) {
+        console.log("Got remote stream");
+        var o0videoElement = document.createElement('video');
+        o0videoElement.srcObject = remoteStream;
+        o0videoElement.setAttribute("autoplay", "true");
+        o0videoElement.play();
+        document.body.appendChild(o0videoElement);
       });
     }
 
@@ -165,8 +152,8 @@
 
     window.addEventListener('load', function() {
       navigator.mediaDevices.getDisplayMedia(constraints1).then(function(stream1) {
-          var videoElement1 = document.getElementById('myscreen');
-          videoElement1.srcObject = stream1;
+          var videoElement = document.getElementById('myvideo');
+          videoElement.srcObject = stream1;
           my_stream1 = stream1;
         })
         .catch(function(err) {
@@ -174,8 +161,8 @@
         });
 
       navigator.mediaDevices.getUserMedia(constraints2).then(function(stream2) {
-          var videoElement2 = document.getElementById('myaudio');
-          videoElement2.srcObject = stream2;
+          var videoElement = document.getElementById('myaudio');
+          videoElement.srcObject = stream2;
           my_stream2 = stream2;
         })
         .catch(function(err) {
@@ -183,13 +170,23 @@
         });
 
       navigator.mediaDevices.getUserMedia(constraints3).then(function(stream3) {
-          var videoElement3 = document.getElementById('myvideo');
-          videoElement3.srcObject = stream3;
+          var videoElement = document.getElementById('myaudio');
+          videoElement.srcObject = stream3;
           my_stream3 = stream3;
         })
         .catch(function(err) {
           alert(err);
         });
+    });
+
+    // We'll use a global variable to hold on to our id from PeerJS
+    var peer_id = null;
+    var static_id = "tushar";
+    // I setup a peer server on a Digital Ocean instance for our use, you can use that with the following constructor:
+    var peer = new Peer('shawn', {
+      host: 'liveweb-new.itp.io',
+      port: 9000,
+      path: '/'
     });
 
     // Get an ID from the PeerJS server
@@ -223,13 +220,19 @@
     <input type="text" id="message" name="message">
     <input type="button" value="message" onclick="sendmessage();">
     <p>
-      <input type="button" id="call_button" value="call" onclick="tring();">
+      <input type="button" id="call_button" value="call Tushar" onclick="tring();">
       <input type="button" id="answer_button" value="answer" onclick="answerCall();">
-      <input type="button" id="hangup_button" value="hang up" onclick="hangUp();">
+      <input type="button" id="hangup_button" value="hang up" onclick="stopTring();">
   </div>
-  <video id="myscreen"></video>
-  <video id="myaudio"></video>
   <video id="myvideo"></video>
+  <video id="myaudio"></video>
+
+  <!-- <audio id="myAudio">
+    <source src="horse.ogg" type="audio/ogg">
+    <source src="horse.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio> -->
+
 </body>
 
 </html>

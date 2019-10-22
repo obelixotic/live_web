@@ -1,0 +1,361 @@
+<html>
+
+<head>
+
+	<style media="screen">
+		video#myscreen {
+      display: none;
+    }
+		video#myaudio {
+      display: none;
+    }
+		video#myvideo {
+      display: none;
+    }
+		.remoteAudio{
+
+		}
+		.remoteVideo{
+
+		}
+		.remoteScreen{
+
+		}
+  </style>
+	<script src="peer.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+
+	<script type="text/javascript">
+		var audio = new Audio('phone_message.wav');
+		var answer_call = false;
+		var socket = io.connect();
+		var partner_peer_id = null;
+		var peer_id = null;
+		var peer = new Peer({
+			host: 'liveweb-new.itp.io',
+			port: 9000,
+			path: '/'
+		});
+		var n;
+		var call1 = null;
+		var call2 = null;
+		var call3 = null;
+		var screenBeingShared = false;
+
+		socket.on('connect', function() {
+			console.log("Connected");
+		});
+
+		socket.on('message', function(data) {
+			console.log("Got: " + data);
+			document.getElementById('messages').innerHTML += data + "<br>";
+		});
+
+		socket.on('screenShare', function() {
+			screenShare2(partner_peer_id);
+			console.log('recd screen share socket event');
+		});
+
+		socket.on('audioShare', function() {
+			audioShare2(partner_peer_id);
+			// console.log("Sharing audio in response");
+		});
+
+		socket.on('videoShare', function() {
+			videoShare2(partner_peer_id);
+			// console.log("Sharing video in response");
+		});
+
+		socket.on('closeStream', function() {
+			closeStream2();
+			// console.log("Closing video in response");
+		});
+
+		socket.on('peer_ids', function(data) {
+			console.log(data);
+			if (peer_id == data[data.length - 1]) {
+				partner_peer_id = data[data.length - 2]
+			} else {
+				partner_peer_id = data[data.length - 1]
+			}
+			console.log("partner peer id: " + partner_peer_id);
+		});
+
+		let peer_stream = null; //peer.on('call', ()=>{})
+		let my_stream1 = null; //screen
+		let my_stream2 = null; //audio
+		let my_stream3 = null; //video
+
+		let constraints1 = { //screen
+			audio: true,
+			video: true
+		}
+
+		let constraints2 = { //audio
+			audio: true,
+			video: false
+		}
+
+		let constraints3 = { //video
+			audio: false,
+			video: true
+		}
+
+		window.addEventListener('load', function() {
+			navigator.mediaDevices.getDisplayMedia(constraints1).then(function(stream1) {
+					var videoElement1 = document.getElementById('myscreen');
+					videoElement1.srcObject = stream1;
+					my_stream1 = stream1;
+				})
+				.catch(function(err) {
+					alert(err);
+				});
+
+			navigator.mediaDevices.getUserMedia(constraints2).then(function(stream2) {
+					var videoElement2 = document.getElementById('myaudio');
+					videoElement2.srcObject = stream2;
+					my_stream2 = stream2;
+				})
+				.catch(function(err) {
+					alert(err);
+				});
+
+			navigator.mediaDevices.getUserMedia(constraints3).then(function(stream3) {
+					var videoElement3 = document.getElementById('myvideo');
+					videoElement3.srcObject = stream3;
+					my_stream3 = stream3;
+				})
+				.catch(function(err) {
+					alert(err);
+				});
+		});
+
+		// Get an ID from the PeerJS server
+		peer.on('open', function(id) {
+			console.log('My peer ID is: ' + id);
+			peer_id = id;
+			socket.emit('peer_id', peer_id)
+		});
+
+		peer.on('error', function(err) {
+			console.log(err);
+		});
+
+		// peer.on('call', function(incoming_call) {
+		// 	incoming_call.answer(my_stream1);
+		// });
+		//
+		// peer.on('call', function(incoming_call) {
+		// 	incoming_call.answer(my_stream2);
+		// });
+
+		peer.on('call', function(incoming_call) {
+			incoming_call.answer(peer_stream);
+		});
+
+		peer.on('close', function() {
+			console.log("close!!!");
+		});
+
+		var sendmessage = function() {
+			var message = document.getElementById('message').value;
+			console.log("Sending: " + message);
+
+			// Send a messaage
+			socket.send(message);
+		};
+
+		function screenShare(id) {
+			console.log("screen share funciton entered");
+			peer_stream = my_stream1;
+			socket.emit('screenShare');
+			closeStream();
+			// audioShare();
+			let e = document.getElementById("remoteScreen");
+			call1 = peer.call(partner_peer_id, my_stream1);
+			call1.on('stream', function(remoteStream) {
+				console.log("Got remote stream");
+				if (!e) {
+					var screenVideoElement = document.createElement('video');
+					screenVideoElement.srcObject = remoteStream;
+					screenVideoElement.id = "remoteScreen";
+					screenVideoElement.setAttribute("autoplay", "true");
+					screenVideoElement.play();
+					document.body.appendChild(screenVideoElement);
+					document.getElementById("screen_button").style.display = "none";
+					document.getElementById("video_button").style.display = "none";
+				}
+				console.log("sharing screen with peer");
+			});
+		}
+
+		function audioShare(id) {
+			peer_stream = my_stream2;
+			socket.emit('audioShare');
+			let e = document.getElementById("remoteAudio");
+			document.getElementById("audio_button").style.display = "none";
+			console.log("sharing audio with peer");
+			call2 = peer.call(partner_peer_id, my_stream2);
+			call2.on('stream', function(remoteStream) {
+				console.log("Got remote stream");
+				if (!e) {
+					var audioVideoElement = document.createElement('video');
+					audioVideoElement.srcObject = remoteStream;
+					audioVideoElement.id = "remoteAudio";
+					audioVideoElement.setAttribute("autoplay", "true");
+					audioVideoElement.play();
+					document.body.appendChild(audioVideoElement);
+				}
+			});
+		}
+
+		function videoShare(id) {
+			peer_stream = my_stream3;
+			socket.emit('videoShare');
+			let e = document.getElementById("remoteVideo");
+			document.getElementById("video_button").style.display = "none";
+			document.getElementById("screen_button").style.display = "none";
+			console.log("sharing video with peer");
+			call3 = peer.call(partner_peer_id, my_stream3);
+			call3.on('stream', function(remoteStream) {
+				console.log("Got remote stream");
+				if (!e) {
+					var videoVideoElement = document.createElement('video');
+					videoVideoElement.srcObject = remoteStream;
+					videoVideoElement.id = "remoteVideo";
+					videoVideoElement.setAttribute("autoplay", "true");
+					videoVideoElement.play();
+					document.body.appendChild(videoVideoElement);
+				}
+			});
+		}
+
+		function closeStream() {
+			socket.emit('closeStream');
+			if (call1) {
+				call1.close();
+				call1 = null;
+				let r = document.getElementById("remoteScreen");
+				if (r) {
+					r.parentNode.removeChild(r);
+				}
+			}
+			if (call2) {
+				call2.close();
+				call2 = null;
+				let r = document.getElementById("remoteAudio");
+				r.parentNode.removeChild(r);
+			}
+			if (call3) {
+				call3.close();
+				call3 = null;
+				let r = document.getElementById("remoteVideo");
+				r.parentNode.removeChild(r);
+			}
+			console.log("closing stream");
+			document.getElementById("screen_button").style.display = "inline";
+			document.getElementById("audio_button").style.display = "inline";
+			document.getElementById("video_button").style.display = "inline";
+			// screenBeingShared = false;
+		}
+
+		function screenShare2(id) {
+			console.log("your screen being share right now");
+			document.getElementById("screen_button").style.display = "none";
+			document.getElementById("video_button").style.display = "none";
+		}
+
+		function audioShare2(id) {
+			peer_stream = my_stream2;
+			let e = document.getElementById("remoteAudio");
+			document.getElementById("audio_button").style.display = "none";
+			call2 = peer.call(partner_peer_id, my_stream2);
+			call2.on('stream', function(remoteStream) {
+				console.log("Got remote stream");
+				if (!e) {
+					var audioVideoElement = document.createElement('video');
+					audioVideoElement.srcObject = remoteStream;
+					audioVideoElement.id = "remoteAudio";
+					audioVideoElement.setAttribute("autoplay", "true");
+					audioVideoElement.play();
+					document.body.appendChild(audioVideoElement);
+					// screenBeingShared = true;
+				}
+			});
+			console.log("Sharing audio in response");
+		}
+
+		function videoShare2(id) {
+			peer_stream = my_stream3;
+			let e = document.getElementById("remoteVideo");
+			document.getElementById("video_button").style.display = "none";
+			document.getElementById("screen_button").style.display = "none";
+			console.log("sharing video with peer");
+			call3 = peer.call(partner_peer_id, my_stream3);
+			call3.on('stream', function(remoteStream) {
+				console.log("Got remote stream");
+				if (!e) {
+					var videoVideoElement = document.createElement('video');
+					videoVideoElement.srcObject = remoteStream;
+					videoVideoElement.id = "remoteVideo";
+					videoVideoElement.setAttribute("autoplay", "true");
+					videoVideoElement.play();
+					document.body.appendChild(videoVideoElement);
+				}
+			});
+			console.log("Sharing video in response");
+		}
+
+		function closeStream2() {
+			if (call1) {
+				call1.close();
+				call1 = null;
+				let r = document.getElementById("remoteScreen");
+				if (r) {
+					r.parentNode.removeChild(r);
+				}
+			}
+			if (call2) {
+				call2.close();
+				call2 = null;
+				let r = document.getElementById("remoteAudio");
+				r.parentNode.removeChild(r);
+			}
+			if (call3) {
+				call3.close();
+				call3 = null;
+				let r = document.getElementById("remoteVideo");
+				r.parentNode.removeChild(r);
+			}
+			console.log("Closing stream in response");
+			// if (!screenBeingShared) {
+			document.getElementById("screen_button").style.display = "inline";
+			document.getElementById("audio_button").style.display = "inline";
+			document.getElementById("video_button").style.display = "inline";
+			// }
+			// document.getElementById("screen_button").style.display = "inline";
+			document.getElementById("audio_button").style.display = "inline";
+			// document.getElementById("video_button").style.display = "inline";
+		}
+	</script>
+</head>
+
+<body>
+	<video id="myscreen"></video>
+	<video id="myaudio"></video>
+	<video id="myvideo"></video>
+	<div>
+		<input type="text" id="message" name="message">
+		<input type="button" value="send!" onclick="sendmessage();">
+		<p>
+			<input type="button" id="screen_button" value="Screen" onclick="screenShare();">
+			<input type="button" id="audio_button" value="Audio" onclick="audioShare();">
+			<input type="button" id="video_button" value="Video" onclick="videoShare();">
+			<input type="button" id="close_button" value="close" onclick="closeStream();">
+	</div>
+	<div id="messages">
+	</div>
+	<!--  -->
+</body>
+
+</html>

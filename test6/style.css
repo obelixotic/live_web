@@ -1,0 +1,137 @@
+body {
+  background-color: #e8f4f8;
+  /* color: white;  */
+  /* font-family: 'Dancing Script', cursive; */
+  cursor: auto;
+}
+
+video#myscreen {
+  display: none;
+}
+
+video#myaudio {
+  display: none;
+}
+
+video#myvideo {
+  display: none;
+}
+
+#remoteAudio {
+  position: absolute;
+  left: 30px;
+  top: 70px;
+}
+
+#remoteVideo {
+  position: absolute;
+  left: 20px;
+  top: 76px;
+  height: 700px;
+  /* border:15px solid #d4ebf2; */
+}
+
+#remoteScreen {
+  position: absolute;
+  cursor: auto;
+  left: 30px;
+  top: 86px;
+  width: 95%;
+}
+
+#chatbox {
+  margin-left: 70%;
+  display: inline-block;
+  vertical-align: top;
+  overflow: hidden;
+  /* font-family: 'Dancing Script', cursive;
+  font-size: 25px; */
+}
+
+#message {
+  color: #071630;
+  font-family: 'Dancing Script', cursive;
+  font-size: 25px;
+}
+
+#messages {
+  height: 100%;
+  width: 400px;
+  padding: 10px;
+  margin: 10px;
+  margin-left: 70%;
+  display: inline-block;
+  vertical-align: top;
+  overflow: auto;
+  background-color: #d4ebf2;
+  font-family: 'Dancing Script', cursive;
+  font-size: 25px;
+}
+
+/* .buttons{
+  width:40px;
+  font-family: 'Dancing Script', cursive;
+  font-size: 15px;
+} */
+.buttons {
+  background-color: #4CAF99;
+  border: 2px;
+  color: white;
+  padding: 10px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.buttons:disabled,
+.buttons[disabled] {
+  /* border: 1px solid #999999; */
+  background-color: #cccccc;
+  color: #666666;
+}
+
+.myMessages {
+  color: #1c2e4a;
+  text-align: right;
+}
+
+.otherMessages {
+  color: #003518;
+}
+
+#screen_button {
+  display: none;
+}
+
+#audio_button {
+  display: none;
+}
+
+#video_button {
+  display: none;
+}
+
+#close_button {
+  display: none;
+}
+
+#answer_button {
+  display: none;
+}
+
+#mouse {
+  position: relative;
+  top: 200px;
+  left: 500px;
+}
+
+#start_button {
+  display: none;
+}
+
+#stop_button {
+  display: none;
+}
