@@ -1,10 +1,14 @@
 body {
   background-color: #e8f4f8;
-  /* color: white;  */
-  /* font-family: 'Dancing Script', cursive; */
   cursor: auto;
+  /* margin: 0;
+  padding: 0; */
 }
 
+/* div {
+  border: 1px solid black;
+  box-sizing: border-box;
+} */
 video#myscreen {
   display: none;
 }
@@ -15,6 +19,10 @@ video#myaudio {
 
 video#myvideo {
   display: none;
+  margin-right: 2%;
+  width: 30%;
+  float: right;
+  margin-top: 15px;
 }
 
 #remoteAudio {
@@ -24,55 +32,84 @@ video#myvideo {
 }
 
 #remoteVideo {
-  position: absolute;
-  left: 20px;
-  top: 76px;
-  height: 700px;
-  /* border:15px solid #d4ebf2; */
+  margin-top: 15px;
+  width: 65%;
+}
+
+div#mediadiv {
+  clear: both;
 }
 
 #remoteScreen {
-  position: absolute;
+  margin-top: 15px;
   cursor: auto;
-  left: 30px;
-  top: 86px;
-  width: 95%;
+  width: calc(144% - 10px);
 }
 
 #chatbox {
-  margin-left: 70%;
   display: inline-block;
   vertical-align: top;
   overflow: hidden;
-  /* font-family: 'Dancing Script', cursive;
-  font-size: 25px; */
+  font-size: 25px;
+  display: flex;
+}
+
+#send_button {
+  /* float: right; */
+  /* order: 2; */
 }
 
 #message {
   color: #071630;
-  font-family: 'Dancing Script', cursive;
-  font-size: 25px;
+  font-size: 22px;
+  flex: 1;
+  /* order: 1; */
 }
 
 #messages {
-  height: 100%;
-  width: 400px;
-  padding: 10px;
-  margin: 10px;
-  margin-left: 70%;
-  display: inline-block;
   vertical-align: top;
+  top: 86px;
   overflow: auto;
-  background-color: #d4ebf2;
-  font-family: 'Dancing Script', cursive;
   font-size: 25px;
+  margin: 10px 0 0 0;
+  clear: both;
 }
 
-/* .buttons{
-  width:40px;
-  font-family: 'Dancing Script', cursive;
-  font-size: 15px;
-} */
+.myMessages {
+  /* color: #1c2e4a; */
+  background-color: #46e2a1;
+  text-align: right;
+  margin-left: auto;
+  margin-right: 0;
+  width: 70%;
+  padding: 3px 15px;
+}
+
+.otherMessages {
+  text-align: left;
+  padding: 3px 15px;
+  /* color: #003518; */
+  /* background-color: lightblue; */
+}
+
+.parent {
+  width: 100%;
+  height: 100%;
+  /* background-color: grey; */
+  clear: both;
+}
+
+.left {
+  width: 70%;
+  float: left;
+}
+
+.right {
+  float: right;
+  width: 30%;
+  height: 100%;
+}
+
 .buttons {
   background-color: #4CAF99;
   border: 2px;
@@ -91,15 +128,6 @@ video#myvideo {
   /* border: 1px solid #999999; */
   background-color: #cccccc;
   color: #666666;
-}
-
-.myMessages {
-  color: #1c2e4a;
-  text-align: right;
-}
-
-.otherMessages {
-  color: #003518;
 }
 
 #screen_button {
