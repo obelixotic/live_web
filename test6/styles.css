@@ -1,8 +1,6 @@
 body {
-  background-color: #e8f4f8;
+  background-color: #E96E4E;
   cursor: auto;
-  /* margin: 0;
-  padding: 0; */
 }
 
 /* div {
@@ -19,7 +17,7 @@ video#myaudio {
 
 video#myvideo {
   display: none;
-  margin-right: 2%;
+  margin-right: 1%;
   width: 30%;
   float: right;
   margin-top: 15px;
@@ -33,7 +31,7 @@ video#myvideo {
 
 #remoteVideo {
   margin-top: 15px;
-  width: 65%;
+  width: 68%;
 }
 
 div#mediadiv {
@@ -55,12 +53,14 @@ div#mediadiv {
 }
 
 #send_button {
+  margin-right: 5px;
+  margin-bottom: 7px;
   /* float: right; */
   /* order: 2; */
 }
 
 #message {
-  color: #071630;
+  border-radius: 20px;
   font-size: 22px;
   flex: 1;
   /* order: 1; */
@@ -76,20 +76,31 @@ div#mediadiv {
 }
 
 .myMessages {
-  /* color: #1c2e4a; */
-  background-color: #46e2a1;
+  color: white;
+  background-color: #850E33;
   text-align: right;
   margin-left: auto;
-  margin-right: 0;
+  margin-right: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   width: 70%;
   padding: 3px 15px;
+  border-radius: 20px;
+  box-shadow: -1px 2px 1px black;
 }
 
 .otherMessages {
   text-align: left;
   padding: 3px 15px;
-  /* color: #003518; */
-  /* background-color: lightblue; */
+  background-color: #E96E4E;
+  width: 70%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 20px;
+  margin-left: 5px;
+  color: black;
+  border: 1px solid #850E33;
+  box-shadow: 1px 1px 1px black;
 }
 
 .parent {
@@ -108,10 +119,13 @@ div#mediadiv {
   float: right;
   width: 30%;
   height: 100%;
+  background: #ff7f52;
+  border-radius: 20px;
+  box-shadow: -2px 4px 8px black;
 }
 
 .buttons {
-  background-color: #4CAF99;
+  background-color: #850E33;
   border: 2px;
   color: white;
   padding: 10px 32px;
@@ -121,6 +135,8 @@ div#mediadiv {
   font-size: 16px;
   margin: 4px 2px;
   cursor: pointer;
+  border-radius: 20px;
+  box-shadow: 2px 4px 4px black;
 }
 
 .buttons:disabled,

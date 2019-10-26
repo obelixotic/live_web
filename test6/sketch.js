@@ -42,7 +42,7 @@ socket.on('answered', function() {
   document.getElementById("call_button").style.display = "none";
 });
 
-socket.on('position', function(data) {
+socket.on('position', function(pos) {
   let m = document.getElementById("mouse");
   m.style.display = "inline";
   if (m.src != "mouse.png") {
@@ -443,7 +443,7 @@ var stopMouseShare = function() {
   window.removeEventListener('mousemove', mousePosition);
   console.log("stop");
   socket.emit('stopMouse');
-  // document.getElementById("remoteScreen").style.cursor = "auto";
+  document.getElementById("remoteScreen").style.cursor = "auto";
   if (screenBeingShared) {
     document.getElementById("start_button").style.display = "inline";
   }
@@ -452,9 +452,9 @@ var stopMouseShare = function() {
 
 function mousePosition(e) {
   console.log("sending mouse position");
-  let p = {
+  let pos = {
     x: e.pageX,
     y: e.pageY
   };
-  socket.emit('position', p);
+  socket.emit('position', pos);
 }
