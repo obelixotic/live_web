@@ -1,4 +1,6 @@
 var audio = new Audio('phone_message.wav');
+var ping = new Audio('ping.wav');
+var pop = new Audio('pop.wav');
 var callinprogress = false;
 var socket = io.connect();
 var partner_peer_id = null;
@@ -31,6 +33,8 @@ socket.on('tring', function() {
 });
 
 socket.on('answered', function() {
+  callinprogress = true;
+  audio.pause();
   console.log("user answered, starting audio stream");
   audioShare();
   document.getElementById("screen_button").style.display = "inline";
@@ -62,7 +66,7 @@ socket.on('message', function(data) {
   m.setAttribute("class", "otherMessages");
   m.innerHTML += data + "<br>";
   document.getElementById('messages').appendChild(m);
-  // document.getElementById('messages').innerHTML += data + "<br>";
+  ping.play();
 });
 
 socket.on('screenShare', function() {
@@ -214,8 +218,8 @@ var sendmessage = function() {
   document.getElementById('messages').appendChild(m);
   let t = document.getElementById("message");
   t.value = "";
-  // document.getElementById('messages').innerHTML += message + "<br>";
   socket.send(message);
+  pop.play();
 };
 
 function screenShare(id) {
@@ -445,7 +449,18 @@ function makeCall() {
   socket.emit('tring', function(e) {});
   document.getElementById('call_button').value = "calling";
   document.getElementById('call_button').disabled = true;
+  audio.play();
+  setInterval(function() {
+    if (!callinprogress) {
+      audio.play();
+      console.log("incoming!");
+    }
+  }, 3000);
+  audio.play();
+  // document.getElementById("myvideo").style.display = "inline";
+  // document.getElementById("myvideo").style.width = "99%";
 }
+
 
 function answerCall() {
   console.log("answering call");
