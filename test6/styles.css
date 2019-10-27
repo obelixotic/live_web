@@ -1,5 +1,11 @@
 body {
-  background-color: #E96E4E;
+  /* background-color: #E96E4E; */
+  background: #fd746c;
+  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to left, #fd746c, #ff9068);
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to left, #fd746c, #ff9068);
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   cursor: auto;
 }
 
@@ -21,6 +27,7 @@ video#myvideo {
   width: 30%;
   float: right;
   margin-top: 15px;
+  /* box-shadow: -1px 1px 5px #f94242; */
 }
 
 #remoteAudio {
@@ -32,6 +39,7 @@ video#myvideo {
 #remoteVideo {
   margin-top: 15px;
   width: 68%;
+  box-shadow: -1px 1px 5px #f94242;
 }
 
 div#mediadiv {
@@ -61,7 +69,7 @@ div#mediadiv {
 
 #message {
   border-radius: 20px;
-  font-size: 22px;
+  font-size: 16px;
   flex: 1;
   /* order: 1; */
 }
@@ -70,14 +78,13 @@ div#mediadiv {
   vertical-align: top;
   top: 86px;
   overflow: auto;
-  font-size: 25px;
+  font-size: 19px;
   margin: 10px 0 0 0;
   clear: both;
 }
 
 .myMessages {
-  color: white;
-  background-color: #850E33;
+  background-color: #ff9068;
   text-align: right;
   margin-left: auto;
   margin-right: 5px;
@@ -86,21 +93,22 @@ div#mediadiv {
   width: 70%;
   padding: 3px 15px;
   border-radius: 20px;
-  box-shadow: -1px 2px 1px black;
+  box-shadow: -1px 2px 1px #f94242;
 }
 
 .otherMessages {
   text-align: left;
   padding: 3px 15px;
-  background-color: #E96E4E;
+  /* background-color: #fd746c; */
+  background: linear-gradient(to left, #ff9068, #fd746c);
   width: 70%;
   margin-top: 10px;
   margin-bottom: 10px;
   border-radius: 20px;
   margin-left: 5px;
   color: black;
-  border: 1px solid #850E33;
-  box-shadow: 1px 1px 1px black;
+  /* border: 1px solid #850E33; */
+  box-shadow: 1px 1px 1px #f94242;
 }
 
 .parent {
@@ -119,9 +127,13 @@ div#mediadiv {
   float: right;
   width: 30%;
   height: 100%;
-  background: #ff7f52;
+  /* background: #ff7f52; */
+  background: #fd746c;
+  background: -webkit-linear-gradient(to left, #fd746c, #ff9068);
+  background: linear-gradient(to left, #fd746c, #ff9068);
   border-radius: 20px;
-  box-shadow: -2px 4px 8px black;
+  /* box-shadow: -2px 4px 8px #f94242; */
+  overflow: auto;
 }
 
 .buttons {
@@ -136,13 +148,13 @@ div#mediadiv {
   margin: 4px 2px;
   cursor: pointer;
   border-radius: 20px;
-  box-shadow: 2px 4px 4px black;
+  box-shadow: 2px 4px 4px #f94242;
 }
 
 .buttons:disabled,
 .buttons[disabled] {
-  /* border: 1px solid #999999; */
-  background-color: #cccccc;
+  /* border: 1px solid #999999; cccccc*/
+  background-color: #ff9068;
   color: #666666;
 }
 

@@ -91,6 +91,7 @@ socket.on('closeStream', function() {
 });
 
 socket.on('peer_ids', function(data) {
+  // checkConnection();
   console.log(data);
   if (peer_id == data[data.length - 1]) {
     partner_peer_id = data[data.length - 2]
@@ -99,6 +100,21 @@ socket.on('peer_ids', function(data) {
   }
   console.log("partner peer id: " + partner_peer_id);
 });
+
+// function checkConnection() {
+//   if (partner_peer_id == null) {
+//     console.log("New connection");
+//   } else {
+//     console.log("oops, looks like they disconnected");
+//     closeStream();
+//     document.getElementById("audio_button").style.visibility = "hidden";
+//     document.getElementById("video_button").style.visibility = "hidden";
+//     document.getElementById("screen_button").style.visibility = "hidden";
+//     document.getElementById("call_button").style.value = "call";
+//     document.getElementById("call_button").disabled = "false";
+//     document.getElementById("call_button").style.display = "inline";
+//   }
+// }
 
 let peer_stream = null; //peer.on('call', ()=>{})
 let my_stream1 = null; //screen
@@ -117,7 +133,10 @@ let constraints2 = { //audio
 
 let constraints3 = { //video
   audio: false,
-  video: true
+  video: {
+    width: 600,
+    height: 400
+  }
 }
 
 window.addEventListener('load', function() {
@@ -174,6 +193,10 @@ peer.on('call', function(incoming_call) {
 peer.on('close', function() {
   console.log("close!!!");
 });
+
+// peer.on('disconnected', function() {
+//   console.log("they disconnected!");
+// });
 
 // var sendmessage = function() {
 //   var message = document.getElementById('message').value;
@@ -288,17 +311,18 @@ function closeStream() {
     call3 = null;
     let r = document.getElementById("remoteVideo");
     r.parentNode.removeChild(r);
-    let m = document.getElementById("myvideo");
-    m.style.display = "none";
   }
   document.getElementById("screen_button").disabled = false;
   document.getElementById("audio_button").disabled = false;
   document.getElementById("video_button").disabled = false;
   document.getElementById("start_button").style.display = "none";
   document.getElementById("stop_button").style.display = "none";
+  document.getElementsByClassName("right")[0].style.display = "inline";
   document.getElementById("messages").style.visibility = "visible";
   document.getElementById("chatbox").style.visibility = "visible";
   console.log("closing stream");
+  let m = document.getElementById("myvideo");
+  m.style.display = "none";
   screenBeingShared = false;
   stopMouseShare();
 }
@@ -321,6 +345,7 @@ function screenShare2(id) {
       // document.body.appendChild(screenVideoElement);
     }
     document.getElementById("start_button").style.display = "inline";
+    document.getElementsByClassName("right")[0].style.display = "none";
     document.getElementById("messages").style.visibility = "hidden";
     document.getElementById("chatbox").style.visibility = "hidden";
   });
@@ -443,7 +468,10 @@ var stopMouseShare = function() {
   window.removeEventListener('mousemove', mousePosition);
   console.log("stop");
   socket.emit('stopMouse');
-  document.getElementById("remoteScreen").style.cursor = "auto";
+  let r = document.getElementById("remoteScreen");
+  if (r) {
+    r.style.cursor = "auto";
+  }
   if (screenBeingShared) {
     document.getElementById("start_button").style.display = "inline";
   }
