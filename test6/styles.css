@@ -23,11 +23,14 @@ video#myaudio {
 
 video#myvideo {
   display: none;
-  margin-right: 1%;
-  width: 30%;
-  float: right;
+  /* margin-right: 1%; */
+  margin-left: 53.4%;
+  width: 15%;
+  /* float: right; */
   margin-top: 15px;
   /* box-shadow: -1px 1px 5px #f94242; */
+  position: absolute;
+  border: 1px solid black;
 }
 
 #remoteAudio {
@@ -38,7 +41,7 @@ video#myvideo {
 
 #remoteVideo {
   margin-top: 15px;
-  width: 68%;
+  width: 99%;
   box-shadow: -1px 1px 5px #f94242;
 }
 
@@ -124,15 +127,16 @@ div#mediadiv {
 }
 
 .right {
+  margin-top: 59px;
   float: right;
   width: 30%;
   height: 100%;
-  /* background: #ff7f52; */
-  background: #fd746c;
+  background: darksalmon;
+  /* background: #fd746c;
   background: -webkit-linear-gradient(to left, #fd746c, #ff9068);
-  background: linear-gradient(to left, #fd746c, #ff9068);
+  background: linear-gradient(to left, #fd746c, #ff9068); */
   border-radius: 20px;
-  /* box-shadow: -2px 4px 8px #f94242; */
+  box-shadow: -2px 4px 8px #f94242;
   overflow: auto;
 }
 
@@ -155,7 +159,7 @@ div#mediadiv {
 .buttons[disabled] {
   /* border: 1px solid #999999; cccccc*/
   background-color: #ff9068;
-  color: #666666;
+  color: black;
 }
 
 #screen_button {

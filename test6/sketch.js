@@ -433,6 +433,7 @@ function closeStream2() {
   document.getElementById("audio_button").disabled = false;
   document.getElementById("video_button").disabled = false;
   document.getElementById("start_button").style.display = "none";
+  document.getElementsByClassName("right")[0].style.display = "inline";
   document.getElementById("messages").style.visibility = "visible";
   document.getElementById("chatbox").style.visibility = "visible";
   console.log("Closing stream in response");
