@@ -15,6 +15,9 @@ var call1 = null;
 var call2 = null;
 var call3 = null;
 var screenBeingShared = false;
+var screenPermission = false;
+var videoPermission = false;
+var audioPermission = false;
 
 socket.on('connect', function() {
   console.log("Connected");
@@ -66,6 +69,7 @@ socket.on('message', function(data) {
   m.setAttribute("class", "otherMessages");
   m.innerHTML += data + "<br>";
   document.getElementById('messages').appendChild(m);
+  ping.volume = 0.1;
   ping.play();
 });
 
@@ -144,14 +148,14 @@ let constraints3 = { //video
 }
 
 window.addEventListener('load', function() {
-  navigator.mediaDevices.getDisplayMedia(constraints1).then(function(stream1) {
-      var videoElement1 = document.getElementById('myscreen');
-      videoElement1.srcObject = stream1;
-      my_stream1 = stream1;
-    })
-    .catch(function(err) {
-      alert(err);
-    });
+  // navigator.mediaDevices.getDisplayMedia(constraints1).then(function(stream1) {
+  //     var videoElement1 = document.getElementById('myscreen');
+  //     videoElement1.srcObject = stream1;
+  //     my_stream1 = stream1;
+  //   })
+  //   .catch(function(err) {
+  //     alert(err);
+  //   });
 
   navigator.mediaDevices.getUserMedia(constraints2).then(function(stream2) {
       var videoElement2 = document.getElementById('myaudio');
@@ -170,6 +174,7 @@ window.addEventListener('load', function() {
     .catch(function(err) {
       alert(err);
     });
+
   let t = document.getElementById("message");
   t.addEventListener('keypress', function(e) {
     if (e.keyCode == 13) {
@@ -177,6 +182,7 @@ window.addEventListener('load', function() {
       t.value = "";
     }
   });
+
 });
 
 // Get an ID from the PeerJS server
@@ -219,10 +225,20 @@ var sendmessage = function() {
   let t = document.getElementById("message");
   t.value = "";
   socket.send(message);
+  pop.volume = 0.3;
   pop.play();
 };
 
 function screenShare(id) {
+  navigator.mediaDevices.getDisplayMedia(constraints1).then(function(stream1) {
+      var videoElement1 = document.getElementById('myscreen');
+      videoElement1.srcObject = stream1;
+      my_stream1 = stream1;
+    })
+    .catch(function(err) {
+      alert(err);
+    });
+
   peer_stream = my_stream1;
   socket.emit('screenShare');
   document.getElementById("video_button").disabled = true;
@@ -279,11 +295,23 @@ function videoShare(id) {
       let div = document.getElementById("mediadiv");
       videoVideoElement.srcObject = remoteStream;
       videoVideoElement.id = "remoteVideo";
+      videoVideoElement.controls = true;
       videoVideoElement.setAttribute("autoplay", "true");
       videoVideoElement.play();
       div.appendChild(videoVideoElement);
-      // document.body.appendChild(videoVideoElement);
     }
+
+    videoVideoElement.addEventListener('click', function() {
+      console.log("clicked!");
+      if (document.getElementById('myvideo').style["margin-left"] != "0%") {
+        document.getElementById('myvideo').style["margin-left"] = "0%";
+        console.log("moved left");
+      } else if (document.getElementById('myvideo').style["margin-left"] == "0%") {
+        document.getElementById('myvideo').style["margin-left"] = "53.4%";
+        console.log("moved right");
+      }
+    });
+
   });
   stopMouseShare();
   let myvid = document.getElementById("myvideo");
@@ -332,10 +360,19 @@ function closeStream() {
 }
 
 function screenShare2(id) {
+  navigator.mediaDevices.getDisplayMedia(constraints1).then(function(stream1) {
+      var videoElement1 = document.getElementById('myscreen');
+      videoElement1.srcObject = stream1;
+      my_stream1 = stream1;
+    })
+    .catch(function(err) {
+      alert(err);
+    });
+
   peer_stream = my_stream1;
   document.getElementById("video_button").disabled = true;
   document.getElementById("screen_button").disabled = true;
-  call1 = peer.call(partner_peer_id, my_stream1);
+  call1 = peer.call(partner_peer_id, my_stream3);
   call1.on('stream', function(remoteStream) {
     let e = document.getElementById("remoteScreen");
     if (!e) {
@@ -394,11 +431,22 @@ function videoShare2(id) {
       let div = document.getElementById("mediadiv");
       videoVideoElement.srcObject = remoteStream;
       videoVideoElement.id = "remoteVideo";
+      videoVideoElement.controls = true;
       videoVideoElement.setAttribute("autoplay", "true");
       videoVideoElement.play();
       div.appendChild(videoVideoElement);
-      // document.body.appendChild(videoVideoElement);
     }
+    videoVideoElement.addEventListener('click', function() {
+      console.log("clicked!");
+      if (document.getElementById('myvideo').style["margin-left"] != "0%") {
+        document.getElementById('myvideo').style["margin-left"] = "0%";
+        console.log("moved left");
+      } else if (document.getElementById('myvideo').style["margin-left"] == "0%") {
+        document.getElementById('myvideo').style["margin-left"] = "53.4%";
+        console.log("moved right");
+      }
+    });
+
   });
   stopMouseShare();
   console.log("Sharing video in response");
