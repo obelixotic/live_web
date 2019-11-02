@@ -112,19 +112,34 @@ io.sockets.on('connection',
       // console.log(peer_ids);
     });
 
-    socket.on('screenShare', function() {
+    socket.on('enable_screen', function() {
       console.log('screenShare recd and sending...');
-      socket.broadcast.emit('screenShare');
+      socket.broadcast.emit('enable_screen');
     });
 
-    socket.on('audioShare', function() {
+    socket.on('disable_screen', function() {
+      console.log('disabling screen share stream...');
+      socket.broadcast.emit('disable_screen');
+    });
+
+    socket.on('enable_audio', function() {
       console.log('audioShare recd and sending...');
-      socket.broadcast.emit('audioShare');
+      socket.broadcast.emit('enable_audio');
     });
 
-    socket.on('videoShare', function() {
+    socket.on('disable_audio', function() {
+      console.log('disabling audio stream...');
+      socket.broadcast.emit('disable_audio');
+    });
+
+    socket.on('enable_video', function() {
       console.log('videoShare recd and sending...');
-      socket.broadcast.emit('videoShare');
+      socket.broadcast.emit('enable_video');
+    });
+
+    socket.on('disable_video', function() {
+      console.log('disabling video stream...');
+      socket.broadcast.emit('disable_video');
     });
 
     socket.on('closeStream', function() {

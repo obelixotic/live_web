@@ -144,8 +144,8 @@ div#mediadiv {
 
 .buttons {
   background-color: #850E33;
-  border: 2px;
   color: white;
+  border: 2px;
   padding: 10px 32px;
   text-align: center;
   text-decoration: none;
@@ -157,11 +157,24 @@ div#mediadiv {
   box-shadow: 2px 4px 4px #f94242;
 }
 
-.buttons:disabled,
+/* .buttons:disabled,
 .buttons[disabled] {
-  /* border: 1px solid #999999; cccccc*/
   background-color: #ff9068;
   color: black;
+} */
+.buttons_disable {
+  background-color: #ff9068;
+  color: black;
+  border: 2px;
+  padding: 10px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 20px;
+  box-shadow: 2px 4px 4px #f94242;
 }
 
 #screen_button {
@@ -181,6 +194,10 @@ div#mediadiv {
 }
 
 #answer_button {
+  display: none;
+}
+
+#hangup_button {
   display: none;
 }
 
