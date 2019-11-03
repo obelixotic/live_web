@@ -147,9 +147,9 @@ io.sockets.on('connection',
       socket.broadcast.emit('closeStream');
     });
 
-    socket.on('tring', function() {
+    socket.on('calling', function() {
       console.log("calling...");
-      socket.broadcast.emit('tring');
+      socket.broadcast.emit('calling');
     });
 
     socket.on('answered', function() {
@@ -157,11 +157,9 @@ io.sockets.on('connection',
       socket.broadcast.emit('answered');
     });
 
-    socket.on('hangup', function(data) {
-      console.log("disconnecting...");
-      let da = 0;
-      socket.emit('hangup', da);
-      socket.broadcast.emit('hangup', da);
+    socket.on('hangup', function() {
+      console.log("hanging up...");
+      socket.broadcast.emit('hangup');
     });
 
     socket.on('disconnect', function() {

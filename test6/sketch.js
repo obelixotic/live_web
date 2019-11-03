@@ -23,16 +23,23 @@ socket.on('connect', function() {
   console.log("Connected");
 });
 
-socket.on('tring', function() {
+socket.on('calling', function() {
+  console.log("calling event received");
   audio.play();
   setInterval(function() {
-    if (!callinprogress) {
+    if (!callinprogress && document.getElementById('answer_button').style.display == "inline") {
       audio.play();
       console.log("incoming!");
     }
   }, 3000);
   document.getElementById('call_button').style.display = "none";
   document.getElementById('answer_button').style.display = "inline";
+  document.getElementById('hangup_button').style.display = "inline";
+});
+
+socket.on('hangup', function() {
+  console.log("hang up event recd");
+  hangUp();
 });
 
 socket.on('answered', function() {
@@ -44,9 +51,7 @@ socket.on('answered', function() {
   document.getElementById("screen_button").style.display = "inline";
   document.getElementById("audio_button").style.display = "inline";
   document.getElementById("video_button").style.display = "inline";
-  // document.getElementById("close_button").style.display = "inline";
-  // document.getElementById("start_button").style.display = "none";
-  // document.getElementById("stop_button").style.display = "none";
+  document.getElementById('answer_button').style.display = "none";
   document.getElementById("call_button").style.display = "none";
 });
 
@@ -310,7 +315,7 @@ function disable_screen() {
     call1 = null;
   }
   let r = document.getElementById("remoteScreen");
-  console.log(r);
+  // console.log(r);
   if (r) {
     r.parentNode.removeChild(r);
     document.getElementsByClassName("right")[0].style.display = "inline";
@@ -443,15 +448,15 @@ function disable_video() {
 }
 
 function makeCall() {
-  socket.emit('tring', function(e) {});
+  socket.emit('calling');
   document.getElementById('call_button').value = "calling";
-  document.getElementById('call_button').disabled = true;
+  disable_call_button();
   document.getElementById('hangup_button').style.display = "inline";
   audio.play();
   setInterval(function() {
-    if (!callinprogress) {
+    if (!callinprogress && document.getElementById("call_button").value == "calling") {
       audio.play();
-      console.log("incoming!");
+      console.log("outgoing!");
     }
   }, 3000);
   audio.play();
@@ -463,29 +468,44 @@ function answerCall() {
   console.log("answering call");
   callinprogress = true;
   audio.pause();
-  socket.emit('answered', function(e) {});
+  socket.emit('answered');
   document.getElementById('answer_button').style.display = "none";
 }
 
+function hangUpShare() {
+  socket.emit('hangup');
+  hangUp();
+}
+
 function hangUp() {
-  if (document.getElementById('answer_button').style.display == "inline") {
+  if (!callinprogress && document.getElementById('answer_button').style.display == "inline") {
+    console.log("receiver's pre call hang up func");
+    enable_call_button();
+    audio.pause();
+    document.getElementById("hangup_button").style.display = "none";
+    document.getElementById("call_button").style.display = "inline";
+    document.getElementById("answer_button").style.display = "none"
+  } else if (!callinprogress && document.getElementById("call_button").value == "calling") {
+    console.log("caller's pre call hang up func");
+    enable_call_button();
+    audio.pause();
+    document.getElementById("answer_button").style.display = "none"
+    document.getElementById("call_button").value = "call";
+    document.getElementById("hangup_button").style.display = "none";
+  } else if (callinprogress) {
+    console.log("common post call hang up func");
+    enable_call_button();
     disable_audio();
     disable_video();
     disable_screen();
-    audio.pause();
+    callinprogress = true;
     document.getElementById("audio_button").style.display = "none";
     document.getElementById("video_button").style.display = "none";
     document.getElementById("screen_button").style.display = "none";
     document.getElementById("hangup_button").style.display = "none";
+    document.getElementById("call_button").value = "call"
     document.getElementById("call_button").style.display = "inline";
-  } else {
-    disable_audio();
-    disable_video();
-    disable_screen();
-    document.getElementById("call_button").style.display = "inline";
-    document.getElementById("call_button").value = "call";
-    document.getElementById("call_button").disabled = false;
-    document.getElementById("hangup_button").style.display = "none";
+    document.getElementById("answer_button").style.display = "none"
   }
 }
 
@@ -518,6 +538,18 @@ function mousePosition(e) {
     y: e.pageY
   };
   socket.emit('position', pos);
+}
+
+function disable_call_button() {
+  // audio_button_disable = true;
+  document.getElementById("call_button").classList.add("buttons_disable");
+  document.getElementById("call_button").classList.remove("buttons");
+}
+
+function enable_call_button() {
+  // audio_button_disable = false;
+  document.getElementById("call_button").classList.add("buttons");
+  document.getElementById("call_button").classList.remove("buttons_disable");
 }
 
 function disable_audio_button() {
