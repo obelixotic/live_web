@@ -46,5 +46,3 @@ function message(pos){
     document.getElementById('message').innerHTML = "Home to do:<br><ul><li>get advil <li>do laundry <li>clean desk <li>sleep on time</ul>"
   }
 }
-
-//AIzaSyCWHDHLHNSTLseP3JX5MxStDcwjjf4SHHQ
