@@ -81,5 +81,3 @@ function message(pos){
 //   }
   
 // hello().then((x) => console.log(x)); // Hello Alligator!
-
-//AIzaSyCWHDHLHNSTLseP3JX5MxStDcwjjf4SHHQ
