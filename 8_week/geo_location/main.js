@@ -1,3 +1,19 @@
+var socket = io.connect();
+var data;
+			
+socket.on('connect', function() {
+  console.log("Connected");
+
+  // Once we are connected, request the history
+  socket.emit('history', null);
+
+  socket.on('showList', function (d) {
+    data = d;
+    console.log(data);
+  });
+
+});
+      
 function initMap(pos) {
   let position = pos;
   console.log(position);

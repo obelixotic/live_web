@@ -1,7 +1,9 @@
 <html>
 	<head>
         <!-- <link rel="stylesheet" href="styles.css"> -->
-        <script type="text/javascript" src="main.js"></script>
+        <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+        <script type="text/javascript" src="main_promise.js"></script>
+        <!-- <script type="text/javascript" src="main.js"></script> -->
         <style>
             #map {
                 height: 400px;
@@ -12,10 +14,9 @@
 	<body>
         <div id="map"></div>
         <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY&callback=getUserPos">
+        src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY&callback=initMap">
         </script>
         <p></p>
         <div id=message></div>
         </body>
 </html>
-<!-- src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY&callback=initMap"> -->
