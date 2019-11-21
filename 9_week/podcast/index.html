@@ -1,0 +1,54 @@
+<html>
+
+<head>
+	<link rel="stylesheet" href="styles.css">
+	<script src="peer.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	<script type="text/javascript" src="sketch.js"></script>
+</head>
+
+<body>
+	<video id="myscreen"></video>
+	<video id="myaudio"></video>
+	<!-- <video id="myvideo"></video> -->
+	<img src="" id="mouse" width="11" height="18"></img>
+	<div class="parent">
+		<div class="left">
+			<div class="buttonpanel">
+				<input type="button" id="audio_button" class="buttons" value="audio" onclick="audioShare();">
+				<input type="button" id="video_button" class="buttons" value="video" onclick="videoShare();">
+				<input type="button" id="screen_button" class="buttons" value="screenshare" onclick="screenShare();">
+				<input type="button" id="note_button" class="buttons" value="notebook" onclick="noteShare();">
+				<input type="button" id="close_button" class="buttons" value="close media" onclick="closeStream();">
+				<div id="buttonwrapper">
+					<input type="button" id="call_button" class="buttons" value="call " onclick="makeCall();">
+					<input type="button" id="answer_button" class="buttons" value="answer" onclick="answerCall();">
+					<input type="button" id="hangup_button" class="buttons" value="hang up " onclick="hangUpShare();">
+				</div>
+				<input type="button" id="message_button" class="buttons" value="messages " onclick="messageView();">
+				<input type="button" id="start_button" class="buttons" value="share mouse" onclick="startMouseShare();">
+				<input type="button" id="stop_button" class="buttons" value="stop sharing mouse" onclick="stopMouseShare();">
+				<input type="text" id="partner_peer_id" value="who do you wanna call?" size="25%" 
+				onClick="javascript:document.getElementById('partner_peer_id').style.color='black'; 
+				document.getElementById('partner_peer_id').value='';" oninput="enter_peer_id()";>
+				<div id="my_peer_id"></div>
+
+			</div>
+			<div id="mediadiv">
+				<video id="myvideo"></video>
+			</div>
+		</div>
+		<div class="right">
+			<div id="chatbox">
+				<input type="text" id="message" name="message" size="15%">
+				<input type="button" id="send_button" class="buttons" value="send!" onclick="sendmessage();">
+			</div>
+			<div id="messages">
+			</div>
+		</div>
+	</div>
+
+
+</body>
+
+</html>

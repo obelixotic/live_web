@@ -1,0 +1,101 @@
+<html>
+	<head>
+		<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+		<script type="text/javascript">
+		
+			var socket = io.connect('http://SERVER_NAME:8080/');
+			
+			socket.on('connect', function() {
+				console.log("Connected");
+			});
+
+			// Receive from any event
+			socket.on('othermouse', function (data) {
+				console.log(data.x + " " + data.y);
+				odraw(data.x,data.y);
+			});
+			
+			var sendmouse = function(xval, yval) {
+				console.log("sendmouse: " + xval + " " + yval);
+				socket.emit('othermouse',{ x: xval, y: yval });
+			};
+
+			///////////////
+			
+			var canvas;
+			var context;
+
+			var initcanvas = function() {
+				canvas = document.getElementById('mycanvas');
+				context = canvas.getContext('2d');
+			
+				context.fillStyle="#FF0000";
+				context.fillRect(0,0,canvas.width,canvas.height);	
+				
+				canvas.addEventListener('mousemove', function(evt) {
+					console.log("mousemove " + evt.clientX + " " + evt.clientY);
+					
+					//evt.clientX is x but in the entire window, not the canvas
+					//evt.clientY is y
+		
+					// Get the canvas bounding rect
+					var canvasRect = canvas.getBoundingClientRect(); 
+
+					// Now calculate the mouse position values
+					y = evt.clientY - canvasRect.top; // minus the starting point of the canvas rect
+					x = evt.clientX - canvasRect.left;  // minus the starting point of the canvas rect on the x axis
+				
+					console.log("mousemove x:" + x + " y:" + y);
+
+					sendmouse(x,y);
+					draw(x,y);
+				}, false);				
+			};
+				
+			var px = 0;
+			var py = 0;
+	
+			var draw = function(xval,yval) {
+				
+				console.log("draw " + xval + " " + yval);
+				
+				context.beginPath();
+	
+				// This is silly but it's what we have to do to get a random hex string
+				context.strokeStyle='#000000';
+	
+				context.moveTo(px,py);
+				context.lineTo(xval,yval);
+
+				context.stroke();
+				
+				px = xval;
+				py = yval;
+			};
+
+			var opx = 0;
+			var opy = 0;
+	
+			var odraw = function(xval,yval) {
+				
+				console.log("draw " + xval + " " + yval);
+				
+				context.beginPath();
+	
+				context.strokeStyle='#000000';
+	
+				context.moveTo(opx,opy);
+				context.lineTo(xval,yval);
+
+				context.stroke();
+				
+				opx = xval;
+				opy = yval;
+			};
+	
+		</script>	
+	</head>
+	<body onload="initcanvas();">
+		<canvas width="600" height="600" id="mycanvas" />
+	</body>
+</html>
