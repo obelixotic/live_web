@@ -1,0 +1,76 @@
+<html>
+
+        <head>
+            <link type="text/css" rel="stylesheet" href="styles.css">
+            <!-- <script type="text/javascript" src="/socket.io/socket.io.js"></script> -->
+            <script type="text/javascript">
+
+            	// var socket = io.connect();
+			
+			    // socket.on('connect', function() {
+                //     console.log("Connected");
+                // });
+
+                var d_alpha = -1,
+                    d_beta = -1,
+                    d_gamma = -1;
+                var p_alpha = -1,
+                    p_beta = -1,
+                    p_gamma = -1;
+
+
+                function onOrientationChange(e) {
+                    var alpha = e.alpha,
+                    beta = e.beta,
+                    gamma = e.gamma;
+                    
+                    // if(d_alpha != -1){
+                        d_alpha = alpha-p_alpha;
+                        d_beta = beta-p_beta;
+                        d_gamma = gamma-p_gamma;
+                    // }
+                    // console.log(Math.floor(d_alpha) + " " + Math.floor(d_beta) + " " + Math.floor(d_gamma));
+
+                    var elem = document.getElementById('map');
+                	elem.innerHTML = d_alpha + " " + d_beta + " " + d_gamma;
+
+                    let m = document.getElementById("mouse");
+                    m.style.top = 700 + beta*10 + 'px';
+                    m.style.left = 500 + gamma*10 + 'px';
+
+                    console.log(m.style.top);
+
+                    p_alpha = alpha,
+                    p_beta = beta,
+                    p_gamma = gamma;
+
+                }
+    
+                window.addEventListener('deviceorientation', onOrientationChange, false);
+
+                // function mousePosition(e) {
+                //     console.log("sending mouse position");
+                //     let pos = {
+                //         x: e.pageX,
+                //         y: e.pageY
+                //     };
+                //     socket.emit('position', pos);
+                // }
+
+                // socket.on('position', function(pos) {
+                    // let m = document.getElementById("mouse");
+                    // m.style.display = "inline";
+                    // if (m.src != "mouse.png") {
+                    //     m.src = "mouse.png";
+                    // }
+                    // m.style.top = pos.y - 50 + 'px';
+                    // m.style.left = pos.x - 50 + 'px';
+                // });
+
+            </script>
+        </head>
+        <body>
+            <div id="map"></div>
+            <img src="mouse.png" id="mouse" width="14" height="26"></img>
+        </body>
+    </html>
