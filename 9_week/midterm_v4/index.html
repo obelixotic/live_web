@@ -1,7 +1,6 @@
 <html>
 
 <head>
-	<!-- <link href="https://fonts.googleapis.com/css?family=Dancing+Script&display=swap" rel="stylesheet"> -->
 	<link rel="stylesheet" href="styles.css">
 	<script src="peer.min.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
@@ -19,10 +18,13 @@
 				<input type="button" id="audio_button" class="buttons" value="audio" onclick="audioShare();">
 				<input type="button" id="video_button" class="buttons" value="video" onclick="videoShare();">
 				<input type="button" id="screen_button" class="buttons" value="screenshare" onclick="screenShare();">
+				<input type="button" id="note_button" class="buttons" value="notebook" onclick="noteShare();">
 				<input type="button" id="close_button" class="buttons" value="close media" onclick="closeStream();">
-				<input type="button" id="call_button" class="buttons" value="call " onclick="makeCall();">
-				<input type="button" id="answer_button" class="buttons" value="answer" onclick="answerCall();">
-				<input type="button" id="hangup_button" class="buttons" value="hang up " onclick="hangUpShare();">
+				<div id="buttonwrapper">
+					<input type="button" id="call_button" class="buttons" value="call " onclick="makeCall();">
+					<input type="button" id="answer_button" class="buttons" value="answer" onclick="answerCall();">
+					<input type="button" id="hangup_button" class="buttons" value="hang up " onclick="hangUpShare();">
+				</div>
 				<input type="button" id="message_button" class="buttons" value="messages " onclick="messageView();">
 				<input type="button" id="start_button" class="buttons" value="share mouse" onclick="startMouseShare();">
 				<input type="button" id="stop_button" class="buttons" value="stop sharing mouse" onclick="stopMouseShare();">

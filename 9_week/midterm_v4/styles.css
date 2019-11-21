@@ -223,6 +223,22 @@ div#mediadiv {
   display: none;
 }
 
+#buttonwrapper{
+  margin: 20% auto 0;
+  display: flex;
+  width: 250px;
+  position: relative;
+}
+
+#call_button{
+  display: block;
+  width: 100px;
+  position: relative;
+  margin: 20% auto 20px;
+  /* margin-top: 20%;
+  margin-left: 50%; */
+}
+
 #answer_button {
   display: none;
   width: 116px;
@@ -232,9 +248,16 @@ div#mediadiv {
 
 #hangup_button {
   display: none;
-  width: 127px;
+  width: 133px;
   position: relative;
   margin: 20% auto 20px;
+}
+
+#note_button{
+  display: none;
+  width: 127px;
+  position: relative;
+  margin: 0% auto 20px;
 }
 
 #mouse {
@@ -249,15 +272,6 @@ div#mediadiv {
 
 #stop_button {
   display: none;
-}
-
-#call_button{
-  display: block;
-  width: 100px;
-  position: relative;
-  margin: 20% auto 20px;
-  /* margin-top: 20%;
-  margin-left: 50%; */
 }
 
 #message_button{

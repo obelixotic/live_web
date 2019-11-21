@@ -18,6 +18,7 @@ var call3 = null;
 var audio_enabled = false;
 var video_enabled = false;
 var screen_enabled = false;
+var note_enabled = false;
 
 socket.on('connect', function() {
   console.log("Connected");
@@ -51,6 +52,10 @@ socket.on('answered', function() {
   document.getElementById("screen_button").style.display = "inline";
   document.getElementById("audio_button").style.display = "inline";
   document.getElementById("video_button").style.display = "inline";
+  document.getElementById("note_button").style.display = "inline";
+  document.getElementById("buttonwrapper").style.display = "inline";
+  document.getElementById("hangup_button").style.display = "inline";
+  document.getElementById("hangup_button").style.margin = "0% auto 20px";
   document.getElementById('answer_button').style.display = "none";
   document.getElementById("call_button").style.display = "none";
   document.getElementById("partner_peer_id").style.display = "none";
@@ -95,6 +100,7 @@ socket.on('enable_audio', function() {
   document.getElementById("screen_button").style.display = "inline";
   document.getElementById("audio_button").style.display = "inline";
   document.getElementById("video_button").style.display = "inline";
+  document.getElementById("note_button").style.display = "inline";
   // document.getElementById("close_button").style.display = "inline";
   // document.getElementById("start_button").style.display = "inline";
 });
@@ -109,6 +115,14 @@ socket.on('enable_video', function() {
 
 socket.on('disable_video', function() {
   disable_video();
+});
+
+socket.on('enable_note', function() {
+  enable_note();
+});
+
+socket.on('disable_note', function() {
+  disable_note();
 });
 
 socket.on('closeStream', function() {
@@ -440,9 +454,35 @@ function disable_video() {
     }
   }
   let m = document.getElementById("myvideo");
-  m.style.display = "none";
+  if(m){
+    m.style.display = "none";
+  }
   console.log("video disabled");
   enable_video_button();
+}
+
+// //NOTES SHARE // //
+
+function noteShare() {
+  if (note_enabled == false) {
+    enable_note();
+    socket.emit('enable_note');
+    console.log("enabling notebook");
+  } else {
+    disable_note();
+    socket.emit('disable_note');
+    console.log("disabling notebook");
+  }
+}
+
+function enable_note() {
+  note_enabled = true;
+  disable_note_button();
+}
+
+function disable_note() {
+  note_enabled = false;
+  enable_note_button();
 }
 
 function makeCall() {
@@ -468,6 +508,9 @@ function answerCall() {
   document.getElementById('answer_button').style.display = "none";
   document.getElementById("partner_peer_id").style.display = "none";
   document.getElementById("my_peer_id").style.display = "none";
+  document.getElementById("buttonwrapper").style.display = "inline";
+  document.getElementById("hangup_button").style.display = "inline";
+  document.getElementById("hangup_button").style.margin = "0% auto 20px";
 }
 
 function hangUpShare() {
@@ -485,6 +528,8 @@ function hangUp() {
     document.getElementById("answer_button").style.display = "none";
     document.getElementById("partner_peer_id").style.display = "block";
     document.getElementById("my_peer_id").style.display = "block";  
+    document.getElementById("buttonwrapper").style.display = "flex";
+    document.getElementById("hangup_button").style.margin = "20% auto 20px"; 
   } else if (!callinprogress && document.getElementById("call_button").value == "calling") {
     console.log("caller's pre call hang up func");
     enable_call_button();
@@ -494,6 +539,9 @@ function hangUp() {
     document.getElementById("hangup_button").style.display = "none";
     document.getElementById("partner_peer_id").style.display = "block";
     document.getElementById("my_peer_id").style.display = "block";  
+    document.getElementById("buttonwrapper").style.display = "flex";
+    document.getElementById("hangup_button").style.margin = "20% auto 20px"; 
+
   } else if (callinprogress) {
     console.log("common post call hang up func");
     enable_call_button();
@@ -504,12 +552,15 @@ function hangUp() {
     document.getElementById("audio_button").style.display = "none";
     document.getElementById("video_button").style.display = "none";
     document.getElementById("screen_button").style.display = "none";
+    document.getElementById("note_button").style.display = "none";
     document.getElementById("hangup_button").style.display = "none";
     document.getElementById("call_button").value = "call"
     document.getElementById("call_button").style.display = "block";
     document.getElementById("answer_button").style.display = "none"
     document.getElementById("partner_peer_id").style.display = "block";
-    document.getElementById("my_peer_id").style.display = "block";  
+    document.getElementById("my_peer_id").style.display = "block"; 
+    document.getElementById("buttonwrapper").style.display = "flex";
+    document.getElementById("hangup_button").style.margin = "20% auto 20px"; 
   }
 }
 
@@ -592,84 +643,12 @@ function enable_screen_button() {
   document.getElementById("screen_button").classList.remove("buttons_disable");
 }
 
+function disable_note_button() {
+  document.getElementById("note_button").classList.add("buttons_disable");
+  document.getElementById("note_button").classList.remove("buttons");
+}
 
-
-// //CLOSE STREAM // //
-//
-// function closeStream() {
-//   peer_stream = null;
-//   socket.emit('closeStream');
-//   if (call1) {
-//     call1.close();
-//     call1 = null;
-//     let r = document.getElementById("remoteScreen");
-//     if (r) {
-//       r.parentNode.removeChild(r);
-//     }
-//   }
-//   if (call2) {
-//     call2.close();
-//     call2 = null;
-//     let r = document.getElementById("remoteAudio");
-//     if (r) {
-//       r.parentNode.removeChild(r);
-//     }
-//   }
-//   if (call3) {
-//     call3.close();
-//     call3 = null;
-//     let r = document.getElementById("remoteVideo");
-//     if (r) {
-//       r.parentNode.removeChild(r);
-//     }
-//   }
-//   document.getElementById("screen_button").disabled = false;
-//   enable_audio_button();
-//   document.getElementById("video_button").disabled = false;
-//   document.getElementById("start_button").style.display = "none";
-//   document.getElementById("stop_button").style.display = "none";
-//   document.getElementsByClassName("right")[0].style.display = "inline";
-//   document.getElementById("messages").style.visibility = "visible";
-//   document.getElementById("chatbox").style.visibility = "visible";
-//   console.log("closing stream");
-//   let m = document.getElementById("myvideo");
-//   m.style.display = "none";
-//   // screenBeingShared = false;
-//   stopMouseShare();
-// }
-//
-// function closeStream2() {
-//   peer_stream = null;
-//   if (call1) {
-//     call1.close();
-//     call1 = null;
-//     let r = document.getElementById("remoteScreen");
-//     if (r) {
-//       r.parentNode.removeChild(r);
-//     }
-//   }
-//   if (call2) {
-//     call2.close();
-//     call2 = null;
-//     let r = document.getElementById("remoteAudio");
-//     r.parentNode.removeChild(r);
-//   }
-//   if (call3) {
-//     call3.close();
-//     call3 = null;
-//     let r = document.getElementById("remoteVideo");
-//     r.parentNode.removeChild(r);
-//     let m = document.getElementById("myvideo");
-//     m.style.display = "none";
-//   }
-//   document.getElementById("screen_button").disabled = false;
-//   enable_audio_button();
-//   document.getElementById("video_button").disabled = false;
-//   document.getElementById("start_button").style.display = "none";
-//   document.getElementsByClassName("right")[0].style.display = "inline";
-//   document.getElementById("messages").style.visibility = "visible";
-//   document.getElementById("chatbox").style.visibility = "visible";
-//   console.log("Closing stream in response");
-//   // screenBeingShared = false;
-//   stopMouseShare();
-// }
+function enable_note_button() {
+  document.getElementById("note_button").classList.add("buttons");
+  document.getElementById("note_button").classList.remove("buttons_disable");
+}

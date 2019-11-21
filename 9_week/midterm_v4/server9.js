@@ -142,6 +142,16 @@ io.sockets.on('connection',
       socket.broadcast.emit('disable_video');
     });
 
+    socket.on('enable_note', function() {
+      console.log('noteShare recd and sending...');
+      socket.broadcast.emit('enable_note');
+    });
+
+    socket.on('disable_note', function() {
+      console.log('disabling notebook...');
+      socket.broadcast.emit('disable_note');
+    });
+
     socket.on('closeStream', function() {
       console.log('closeStream recd and sending...');
       socket.broadcast.emit('closeStream');
