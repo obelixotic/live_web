@@ -56,6 +56,7 @@ socket.on('answered', function() {
   document.getElementById("buttonwrapper").style.display = "inline";
   document.getElementById("hangup_button").style.display = "inline";
   document.getElementById("hangup_button").style.margin = "0% auto 20px";
+  // document.getElementsByClass("left")[0].style.width = "70%";
   document.getElementById('answer_button').style.display = "none";
   document.getElementById("call_button").style.display = "none";
   document.getElementById("partner_peer_id").style.display = "none";
@@ -423,16 +424,17 @@ function enable_video() {
       div.appendChild(videoVideoElement);
     }
 
-    videoVideoElement.addEventListener('click', function() {
-      console.log("clicked!");
-      if (document.getElementById('myvideo').style["margin-left"] != "0%") {
-        document.getElementById('myvideo').style["margin-left"] = "0%";
-        console.log("moved left");
-      } else if (document.getElementById('myvideo').style["margin-left"] == "0%") {
-        document.getElementById('myvideo').style["margin-left"] = "53.4%";
-        console.log("moved right");
-      }
-    });
+    // move the inset video left or right
+    // videoVideoElement.addEventListener('click', function() {
+    //   console.log("clicked!");
+    //   if (document.getElementById('myvideo').style["margin-left"] != "0%") {
+    //     document.getElementById('myvideo').style["margin-left"] = "0%";
+    //     console.log("moved left");
+    //   } else if (document.getElementById('myvideo').style["margin-left"] == "0%") {
+    //     document.getElementById('myvideo').style["margin-left"] = "53.4%";
+    //     console.log("moved right");
+    //   }
+    // });
   });
 
   let myvid = document.getElementById("myvideo");
@@ -554,8 +556,9 @@ function hangUp() {
     document.getElementById("screen_button").style.display = "none";
     document.getElementById("note_button").style.display = "none";
     document.getElementById("hangup_button").style.display = "none";
-    document.getElementById("call_button").value = "call"
+    document.getElementById("call_button").value = "call";
     document.getElementById("call_button").style.display = "block";
+    // document.getElementsByClass("left")[0].style.width = "100%";
     document.getElementById("answer_button").style.display = "none"
     document.getElementById("partner_peer_id").style.display = "block";
     document.getElementById("my_peer_id").style.display = "block"; 

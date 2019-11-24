@@ -159,13 +159,7 @@ let my_stream3 = null; //video
 
 let constraints1 = { //screen
   audio: false,
-  video: {
-    width: {
-      ideal: 640},
-    height: {
-      ideal: 480
-    }
-  }
+  video: true
 }
 
 let constraints2 = { //audio

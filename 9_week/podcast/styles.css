@@ -1,4 +1,6 @@
 body {
+  background-color: #97bcf7;
+  background-image: linear-gradient(333deg, #97bcf7 -10%, #f8bcc5 84%);  
   /* background-color: #E96E4E; */
   /* background: #fd746c; */
   /* fallback for old browsers */

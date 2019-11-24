@@ -26,14 +26,14 @@ video#myaudio {
 video#myvideo {
   display: none;
   /* margin-right: 1%; */
-  margin-left: 53.4%;
+  /* margin-left: 53.4%; */
   width: 15%;
   /* float: right; */
   margin-top: 15px;
   /* box-shadow: -1px 1px 5px #f94242; */
   position: absolute;
   border: 1px solid black;
-  border-radius: 20px;
+  /* border-radius: 20px; */
 }
 
 #remoteAudio {
@@ -44,9 +44,9 @@ video#myvideo {
 
 #remoteVideo {
   margin-top: 15px;
-  width: 99%;
+  width: 68%;
   box-shadow: -1px 1px 5px #f94242;
-  border-radius: 20px;
+  /* border-radius: 20px; */
 }
 
 div#mediadiv {
@@ -124,7 +124,7 @@ div#mediadiv {
   width: 70%;
   padding: 3px 15px;
   border-radius: 20px;
-  box-shadow: -1px 2px 1px #f94242;
+  box-shadow: -1px 2px 1px #524e4e;
 }
 
 .otherMessages {
@@ -139,7 +139,7 @@ div#mediadiv {
   margin-left: 5px;
   color: black;
   /* border: 1px solid #850E33; */
-  box-shadow: 1px 1px 1px #f94242;
+  box-shadow: 1px 1px 1px #524e4e;
 }
 
 .parent {
@@ -150,7 +150,7 @@ div#mediadiv {
 }
 
 .left {
-  width: 101%;
+  width: 100%;
   float: left;
   /* width: 400px;
   position: relative;
@@ -161,19 +161,19 @@ div#mediadiv {
   display: none;
   margin-top: 59px;
   float: right;
-  width: 0;
+  width: 30%;
   height: 88%;
   background: darksalmon;
   /* background: #fd746c;
   background: -webkit-linear-gradient(to left, #fd746c, #ff9068);
   background: linear-gradient(to left, #fd746c, #ff9068); */
   border-radius: 20px;
-  box-shadow: -2px 4px 8px #f94242;
+  box-shadow: -2px 4px 8px #524e4e;
   overflow: auto;
 }
 
 .buttons {
-  background-color: #850E33;
+  background-color: #1c0680;
   color: white;
   border: 2px;
   padding: 10px 32px;
@@ -184,7 +184,7 @@ div#mediadiv {
   margin: 4px 2px;
   cursor: pointer;
   border-radius: 20px;
-  box-shadow: 2px 4px 4px #f94242;
+  box-shadow: 2px 4px 4px #524e4e;
 }
 
 /* .buttons:disabled,
@@ -193,7 +193,7 @@ div#mediadiv {
   color: black;
 } */
 .buttons_disable {
-  background-color: #ff9068;
+  background-color: #f67e7d;
   color: black;
   border: 2px;
   padding: 10px 32px;
@@ -204,7 +204,7 @@ div#mediadiv {
   margin: 4px 2px;
   cursor: pointer;
   border-radius: 20px;
-  box-shadow: 2px 4px 4px #f94242;
+  box-shadow: 2px 4px 4px #524e4e;
 }
 
 #screen_button {
