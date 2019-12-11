@@ -95,6 +95,7 @@ socket.on('message', function(data) {
 });
 
 socket.on('enable_screen', function() {
+  // alert("hi, please double click on the screen picture you will see once you click ok. This will allow your peer to share his screen with you");
   enable_screen_peer();
 });
 
@@ -276,7 +277,7 @@ function screenShare() {
     socket.emit('disable_note');
 
     enable_screen();
-    document.getElementById('log').style.display = "inline";
+    setTimeout(()=>{document.getElementById('log').style.display = "inline";},2500);
     socket.emit('enable_screen');
     console.log("enabling screen");
   } else {
