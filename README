@@ -1,5 +1,6 @@
 Homework for the Live Web class which is mostly about web sockets and webRTC
 
 Final project was an online collaboration/podcasting web application that can be used for audio/video calling, screen sharing. The application also provides the functionality for drawing on a shared canvas.
+
 The application uses peerJS library and can be found here (need to people to log on to 'call' each other):
 https://tg1799.itp.io/avakya
