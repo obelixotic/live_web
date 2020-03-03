@@ -40,8 +40,8 @@ var socket_ids = [];
 var peer_ids = [];
 
 var options = {
-    key: fs.readFileSync('my-key.pem'),
-    cert: fs.readFileSync('my-cert.pem')
+    key: fs.readFileSync('/etc/letsencrypt/live/tg1799.itp.io/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/tg1799.itp.io/fullchain.pem')
 };
 
 function handleIt(req, res) {
@@ -74,7 +74,7 @@ function handleIt(req, res) {
 var httpServer = https.createServer(options, handleIt);
 httpServer.listen(443);
 
-console.log('Server listening on port 8000');
+console.log('Server listening on port 443');
 
 // WebSocket Portion
 // WebSockets work with the HTTP server
