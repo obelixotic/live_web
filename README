@@ -4,3 +4,4 @@ Final project was an online collaboration/podcasting web application that can be
 
 The application uses peerJS library and can be found here (need to people to log on to 'call' each other):
 https://tg1799.itp.io/avakya
+To test, open the link on two different browser windows/machines and allow for microphone aand video camera access
