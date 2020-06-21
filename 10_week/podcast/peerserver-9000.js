@@ -8,3 +8,6 @@ var server = PeerServer({
         cert: fs.readFileSync('my-cert.pem')
     }
 });
+
+// console.log(server);
+console.log("listening on port: 9000");
