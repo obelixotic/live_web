@@ -38,9 +38,9 @@ function handleIt(req, res) {
 }
 
 var httpsServer = https.createServer(options, handleIt);
-httpsServer.listen(443);
+httpsServer.listen(444);
 
-console.log('Server listening on port 443');
+console.log('Server listening on port 444');
 
 // WebSocket Portion
 // WebSockets work with the HTTP server
