@@ -37,14 +37,14 @@ function handleIt(req, res) {
     console.log("Got a request " + req.url);
 }
 
-var httpServer = https.createServer(options, handleIt);
-httpServer.listen(443);
+var httpsServer = https.createServer(options, handleIt);
+httpsServer.listen(443);
 
 console.log('Server listening on port 443');
 
 // WebSocket Portion
 // WebSockets work with the HTTP server
-var io = require('socket.io').listen(httpServer);
+var io = require('socket.io').listen(httpsServer);
 
 // Register a callback function to run when we have an individual connection
 // This is run for each individual user that connects
