@@ -1,6 +1,7 @@
 var https = require('https');
 var fs = require('fs'); // Using the filesystem module
 var url = require('url');
+var port = 444;
 
 var socket_ids = [];
 var peer_ids = [];
@@ -38,9 +39,9 @@ function handleIt(req, res) {
 }
 
 var httpsServer = https.createServer(options, handleIt);
-httpsServer.listen(444);
+httpsServer.listen(port);
 
-console.log('Server listening on port 444');
+console.log('Server listening on port '+port);
 
 // WebSocket Portion
 // WebSockets work with the HTTP server
